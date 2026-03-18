@@ -60,6 +60,63 @@ This script will:
 - Commit and push changes to GitHub
 - Trigger automatic redeployment
 
+## Windows VDI Update Process
+
+If you're running the dashboard locally on Windows VDI:
+
+### Manual Update (Simplest)
+
+1. Get your new Jira CSV export (e.g., `Sprint 11 - 03-17-26.csv`)
+2. Navigate to: `ExecDash\public\data\`
+3. **Optional**: Backup current data
+   - Copy `latest.csv` to `archive` folder
+   - Rename with date: `2026-03-18-jira-export.csv`
+4. **Replace** `latest.csv` with your new export
+5. Refresh browser - data updates automatically!
+
+### PowerShell Script (Automated)
+
+**Option 1 - Right-click method:**
+1. Right-click `update-data.ps1`
+2. Select **"Run with PowerShell"**
+3. Enter path to your CSV when prompted
+
+**Option 2 - PowerShell command:**
+```powershell
+.\update-data.ps1 -CSVPath "C:\Users\YourName\Downloads\Sprint-11-03-17-26.csv"
+```
+
+**Option 3 - Drag and drop:**
+1. Drag your CSV file onto `update-data.ps1`
+2. The script runs automatically
+
+### Windows Path Formats
+
+Use backslashes for Windows paths:
+```powershell
+# Correct
+C:\Users\YourName\Documents\ExecDash\public\data\latest.csv
+
+# Also works (PowerShell accepts forward slashes)
+C:/Users/YourName/Documents/ExecDash/public/data/latest.csv
+```
+
+### Windows Git Commands
+
+```powershell
+# Navigate to project folder
+cd "C:\Users\YourName\Documents\ExecDash"
+
+# Stage changes
+git add public\data\
+
+# Commit with date
+git commit -m "Update dashboard data - $(Get-Date -Format 'yyyy-MM-dd')"
+
+# Push to remote
+git push origin main
+```
+
 ## CSV Format Requirements
 
 Your Jira export must include these columns:
