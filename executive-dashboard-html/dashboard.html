@@ -834,7 +834,7 @@
     <div class="header">
         <div class="header-content">
             <div class="header-left">
-                <h1>Lumenalta Elysium - Capital Group</h1>
+                <h1>Lumenalta - Elysium - Capital Group</h1>
                 <p id="lastUpdated">Last updated: Loading...</p>
             </div>
             <div class="header-right">
@@ -1009,7 +1009,8 @@
                             const status = row['Status'] || row['State'] || '';
                             const assignee = row['Assignee'] || row['Assigned To'] || '';
                             const priority = row['Priority'] || '';
-                            const epic = row['Epic'] || row['Epic Name'] || row['Epic Link'] || '';
+                            const epic = row['Labels_1'] || row['Epic'] || row['Epic Name'] || row['Epic Link'] || '';
+                            const sprint = row['Sprint'] || '';
                             const created = row['Created'] || row['Create Date'] || '';
                             const updated = row['Updated'] || row['Last Updated'] || '';
                             const dueDate = row['Due Date'] || row['Due'] || '';
@@ -1023,6 +1024,7 @@
                                 assignee,
                                 priority,
                                 epic,
+                                sprint,
                                 created,
                                 updated,
                                 dueDate,
@@ -1073,7 +1075,7 @@
             const epicMap = new Map();
 
             tickets.forEach(ticket => {
-                const epic = ticket.epic || 'No Epic';
+                const epic = ticket.epic || 'Others';
 
                 if (!epicMap.has(epic)) {
                     epicMap.set(epic, {
