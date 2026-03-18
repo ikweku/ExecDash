@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executive Dashboard - Gerald Board</title>
+    <title>Lumenalta Elysium - Capital Group</title>
 
     <!-- External Libraries from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -103,7 +103,12 @@
             padding: 1rem 1.5rem;
             border-radius: 0.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .progress-bar-container:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         .progress-bar-label {
@@ -142,6 +147,40 @@
             border-radius: 0.5rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             border-top: 4px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-card:active {
+            transform: translateY(-2px);
+        }
+
+        .metric-card.active {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
 
         .metric-card.done { border-top-color: #10b981; }
@@ -150,22 +189,57 @@
         .metric-card.todo { border-top-color: #6b7280; }
         .metric-card.blocked { border-top-color: #ef4444; }
 
+        .metric-card.active.done {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border-top-width: 6px;
+        }
+        .metric-card.active.in-progress {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-top-width: 6px;
+        }
+        .metric-card.active.in-review {
+            background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+            border-top-width: 6px;
+        }
+        .metric-card.active.todo {
+            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            border-top-width: 6px;
+        }
+        .metric-card.active.blocked {
+            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+            border-top-width: 6px;
+        }
+
         .metric-label {
             font-size: 0.875rem;
             color: #6b7280;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .metric-value {
             font-size: 2rem;
             font-weight: 700;
             color: #1f2937;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .metric-card:hover .metric-value {
+            color: #6b21a8;
         }
 
         .metric-subtext {
             font-size: 0.875rem;
             color: #9ca3af;
             margin-top: 0.25rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Charts grid */
@@ -181,6 +255,12 @@
             padding: 1.5rem;
             border-radius: 0.5rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .chart-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
         }
 
         .chart-title {
@@ -400,7 +480,7 @@
     <div class="header">
         <div class="header-content">
             <div class="header-left">
-                <h1>Executive Dashboard - Gerald Board</h1>
+                <h1>Lumenalta Elysium - Capital Group</h1>
                 <p id="lastUpdated">Last updated: Loading...</p>
             </div>
             <div class="header-right">
@@ -501,6 +581,7 @@
         let allTickets = [];
         let filteredTickets = [];
         let charts = {};
+        let activeFilter = null; // Track active filter: 'done', 'in-progress', 'in-review', 'todo', 'blocked', or null
 
         // ===== STATUS NORMALIZATION =====
         const statusMap = {
@@ -762,31 +843,31 @@
         function renderMetrics(metrics) {
             const metricsGrid = document.getElementById('metricsGrid');
             metricsGrid.innerHTML = `
-                <div class="metric-card done">
+                <div class="metric-card done ${activeFilter === 'all' ? 'active' : ''}" data-filter="all">
                     <div class="metric-label">Total Tickets</div>
                     <div class="metric-value">${metrics.totalTickets}</div>
                 </div>
-                <div class="metric-card done">
+                <div class="metric-card done ${activeFilter === 'done' ? 'active' : ''}" data-filter="done">
                     <div class="metric-label">Completed</div>
                     <div class="metric-value">${metrics.percentComplete}%</div>
                     <div class="metric-subtext">${metrics.doneTickets} tickets</div>
                 </div>
-                <div class="metric-card in-progress">
+                <div class="metric-card in-progress ${activeFilter === 'in-progress' ? 'active' : ''}" data-filter="in-progress">
                     <div class="metric-label">In Progress</div>
                     <div class="metric-value">${metrics.percentInProgress}%</div>
                     <div class="metric-subtext">${metrics.inProgressTickets} tickets</div>
                 </div>
-                <div class="metric-card in-review">
+                <div class="metric-card in-review ${activeFilter === 'in-review' ? 'active' : ''}" data-filter="in-review">
                     <div class="metric-label">In Review</div>
                     <div class="metric-value">${metrics.percentInReview}%</div>
                     <div class="metric-subtext">${metrics.inReviewTickets} tickets</div>
                 </div>
-                <div class="metric-card todo">
+                <div class="metric-card todo ${activeFilter === 'todo' ? 'active' : ''}" data-filter="todo">
                     <div class="metric-label">To Do</div>
                     <div class="metric-value">${metrics.percentRemaining}%</div>
                     <div class="metric-subtext">${metrics.todoTickets} tickets</div>
                 </div>
-                <div class="metric-card blocked">
+                <div class="metric-card blocked ${activeFilter === 'blocked' ? 'active' : ''}" data-filter="blocked">
                     <div class="metric-label">Blocked</div>
                     <div class="metric-value">${metrics.blockedTickets}</div>
                     <div class="metric-subtext">${metrics.percentBlocked}% of total</div>
@@ -796,6 +877,48 @@
             // Update progress bar
             document.getElementById('progressPercent').textContent = `${metrics.percentComplete}%`;
             document.getElementById('progressFill').style.width = `${metrics.percentComplete}%`;
+
+            // Add click event listeners to metric cards
+            document.querySelectorAll('.metric-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const filter = card.dataset.filter;
+                    handleMetricCardClick(filter);
+                });
+            });
+        }
+
+        function handleMetricCardClick(filter) {
+            // Toggle filter: if clicking the same card, clear filter
+            if (activeFilter === filter) {
+                activeFilter = null;
+                filteredTickets = allTickets;
+            } else {
+                activeFilter = filter;
+
+                if (filter === 'all') {
+                    filteredTickets = allTickets;
+                } else {
+                    // Map filter to status
+                    const statusMap = {
+                        'done': 'Done',
+                        'in-progress': 'In Progress',
+                        'in-review': 'In Review',
+                        'todo': 'To Do',
+                        'blocked': 'Blocked'
+                    };
+
+                    const status = statusMap[filter];
+                    filteredTickets = allTickets.filter(ticket => ticket.status === status);
+                }
+            }
+
+            // Clear search box
+            document.getElementById('searchBox').value = '';
+
+            // Re-render with updated filter
+            const metrics = calculateMetrics(allTickets);
+            renderMetrics(metrics);
+            renderIssueTable(filteredTickets);
         }
 
         function renderStatusDonutChart(metrics) {
@@ -1065,6 +1188,13 @@
         // ===== EVENT HANDLERS =====
         document.getElementById('searchBox').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
+
+            // Reset active filter when user types
+            if (searchTerm !== '') {
+                activeFilter = null;
+                const metrics = calculateMetrics(allTickets);
+                renderMetrics(metrics);
+            }
 
             if (searchTerm === '') {
                 filteredTickets = allTickets;
