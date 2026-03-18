@@ -473,6 +473,365 @@
             40% { content: ".."; }
             60%, 100% { content: "..."; }
         }
+
+        /* ===== DARK MODE ===== */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 50%, #3d2b5f 100%);
+        }
+
+        body.dark-mode .progress-bar-container,
+        body.dark-mode .metric-card,
+        body.dark-mode .chart-card,
+        body.dark-mode .narrative-section,
+        body.dark-mode .issue-tracker,
+        body.dark-mode .upload-section,
+        body.dark-mode .executive-summary {
+            background: #2d2d2d;
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .metric-label,
+        body.dark-mode .narrative-text,
+        body.dark-mode th {
+            color: #9ca3af;
+        }
+
+        body.dark-mode .metric-value,
+        body.dark-mode .chart-title,
+        body.dark-mode .narrative-title {
+            color: #f3f4f6;
+        }
+
+        body.dark-mode table {
+            color: #e5e7eb;
+        }
+
+        body.dark-mode th {
+            background: #1a1a1a;
+            border-bottom-color: #404040;
+        }
+
+        body.dark-mode td {
+            border-bottom-color: #404040;
+        }
+
+        body.dark-mode tr:hover {
+            background: #3a3a3a;
+        }
+
+        body.dark-mode .search-box {
+            background: #3a3a3a;
+            border-color: #505050;
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .progress-bar {
+            background: #404040;
+        }
+
+        body.dark-mode .upload-zone {
+            border-color: #505050;
+        }
+
+        body.dark-mode .upload-zone:hover {
+            background: #3a3a3a;
+        }
+
+        /* ===== ENHANCED PRESENTATION MODE ===== */
+        body.presentation-mode .header h1 {
+            font-size: 2.25rem;
+        }
+
+        body.presentation-mode .metric-value {
+            font-size: 2.5rem;
+        }
+
+        body.presentation-mode .metric-label {
+            font-size: 1rem;
+        }
+
+        body.presentation-mode .chart-title {
+            font-size: 1.5rem;
+        }
+
+        body.presentation-mode .narrative-title {
+            font-size: 1.5rem;
+        }
+
+        body.presentation-mode .narrative-text {
+            font-size: 1.25rem;
+        }
+
+        body.presentation-mode table {
+            font-size: 1rem;
+        }
+
+        body.presentation-mode .container {
+            padding: 1.5rem;
+        }
+
+        /* ===== EXECUTIVE SUMMARY ===== */
+        .executive-summary {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border-left: 6px solid #6b21a8;
+        }
+
+        .executive-summary h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .executive-summary h2::before {
+            content: "⚡";
+            font-size: 1.5rem;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .insight-item {
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.375rem;
+            border-left: 3px solid;
+        }
+
+        .insight-item.risk {
+            border-left-color: #ef4444;
+        }
+
+        .insight-item.success {
+            border-left-color: #10b981;
+        }
+
+        .insight-item.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .insight-item.info {
+            border-left-color: #3b82f6;
+        }
+
+        .insight-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .insight-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .insight-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        /* ===== SECTION NAVIGATION ===== */
+        .section-nav {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        body.dark-mode .section-nav {
+            background: #2d2d2d;
+        }
+
+        .section-nav-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .section-nav-btn {
+            padding: 0.5rem 1rem;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .section-nav-btn:hover {
+            background: #6b21a8;
+            color: white;
+        }
+
+        body.dark-mode .section-nav-btn {
+            background: #3a3a3a;
+            color: #e5e7eb;
+        }
+
+        body.dark-mode .section-nav-btn:hover {
+            background: #6b21a8;
+            color: white;
+        }
+
+        body.presentation-mode .section-nav {
+            display: none;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .header-right,
+            .upload-section,
+            .section-nav,
+            .search-box,
+            .btn {
+                display: none !important;
+            }
+
+            .header {
+                position: static;
+                background: linear-gradient(135deg, #4c1d95 0%, #6b21a8 50%, #7c3aed 100%);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-after: avoid;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 1rem;
+            }
+
+            .progress-bar-container,
+            .executive-summary {
+                page-break-inside: avoid;
+                page-break-after: auto;
+                margin-bottom: 1.5rem;
+            }
+
+            .metrics-grid {
+                page-break-inside: avoid;
+                page-break-after: auto;
+                margin-bottom: 1.5rem;
+            }
+
+            .charts-grid {
+                page-break-before: always;
+            }
+
+            .chart-card {
+                page-break-inside: avoid;
+                page-break-after: always;
+                margin-bottom: 2rem;
+            }
+
+            .narrative-section {
+                page-break-before: always;
+                page-break-inside: avoid;
+            }
+
+            .issue-tracker {
+                page-break-before: always;
+                font-size: 0.75rem;
+            }
+
+            .issue-tracker table {
+                font-size: 0.7rem;
+            }
+
+            .status-badge,
+            .metric-card,
+            .chart-card,
+            .narrative-section,
+            .issue-tracker {
+                box-shadow: none;
+                border: 1px solid #e5e7eb;
+            }
+
+            /* Ensure colors print correctly */
+            .metric-card.done { border-top-color: #10b981 !important; }
+            .metric-card.in-progress { border-top-color: #3b82f6 !important; }
+            .metric-card.in-review { border-top-color: #f59e0b !important; }
+            .metric-card.todo { border-top-color: #6b7280 !important; }
+            .metric-card.blocked { border-top-color: #ef4444 !important; }
+
+            .progress-bar-fill {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .status-done,
+            .status-in-progress,
+            .status-in-review,
+            .status-todo,
+            .status-blocked {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* ===== SMOOTH SCROLLING ===== */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== FILTER BADGE ===== */
+        .active-filter-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #6b21a8;
+            color: white;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .clear-filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .clear-filter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -484,6 +843,7 @@
                 <p id="lastUpdated">Last updated: Loading...</p>
             </div>
             <div class="header-right">
+                <button class="btn btn-secondary" id="darkModeBtn">🌙 Dark Mode</button>
                 <button class="btn btn-secondary" id="presentationModeBtn">Presentation Mode</button>
                 <button class="btn btn-primary" id="refreshBtn">Refresh Data</button>
             </div>
@@ -501,8 +861,29 @@
             </div>
         </div>
 
+        <!-- Section Navigation -->
+        <div class="section-nav">
+            <span class="section-nav-label">Jump to:</span>
+            <button class="section-nav-btn" onclick="document.getElementById('summarySection').scrollIntoView()">📊 Summary</button>
+            <button class="section-nav-btn" onclick="document.getElementById('metricsSection').scrollIntoView()">📈 Metrics</button>
+            <button class="section-nav-btn" onclick="document.getElementById('chartsSection').scrollIntoView()">📉 Charts</button>
+            <button class="section-nav-btn" onclick="document.getElementById('tableSection').scrollIntoView()">📋 Issues</button>
+            <div id="activeFilterBadge" style="margin-left: auto; display: none;" class="active-filter-badge">
+                <span id="filterText">Filter active</span>
+                <button class="clear-filter-btn" id="clearFilterBtn">✕ Clear</button>
+            </div>
+        </div>
+
+        <!-- Executive Summary -->
+        <div class="executive-summary" id="summarySection">
+            <h2>Executive Summary</h2>
+            <div class="insights-grid" id="insightsGrid">
+                <!-- Insights will be populated by JavaScript -->
+            </div>
+        </div>
+
         <!-- Progress Bar -->
-        <div class="progress-bar-container">
+        <div class="progress-bar-container" id="metricsSection">
             <div class="progress-bar-label">
                 <span id="progressLabel">Sprint Progress</span>
                 <span id="progressPercent">0%</span>
@@ -518,7 +899,7 @@
         </div>
 
         <!-- Charts Grid -->
-        <div class="charts-grid">
+        <div class="charts-grid" id="chartsSection">
             <div class="chart-card">
                 <div class="chart-title">Status Distribution</div>
                 <div class="chart-container">
@@ -552,7 +933,7 @@
         </div>
 
         <!-- Issue Tracker -->
-        <div class="issue-tracker">
+        <div class="issue-tracker" id="tableSection">
             <div class="chart-title">Issue Tracker</div>
             <input type="text" id="searchBox" class="search-box" placeholder="Search by key, summary, assignee, epic...">
             <div style="overflow-x: auto;">
@@ -839,6 +1220,77 @@
             return narrative;
         }
 
+        function generateExecutiveSummary(tickets, metrics) {
+            const insights = [];
+
+            // 1. Velocity/Progress Insight
+            if (metrics.percentComplete >= 75) {
+                insights.push({
+                    type: 'success',
+                    label: 'On Track',
+                    value: `${metrics.percentComplete}% Complete`,
+                    description: 'Sprint is progressing well ahead of schedule'
+                });
+            } else if (metrics.percentComplete >= 50) {
+                insights.push({
+                    type: 'info',
+                    label: 'Steady Progress',
+                    value: `${metrics.percentComplete}% Complete`,
+                    description: 'Sprint is on track to meet goals'
+                });
+            } else {
+                insights.push({
+                    type: 'warning',
+                    label: 'Needs Attention',
+                    value: `${metrics.percentComplete}% Complete`,
+                    description: 'May need additional resources or time'
+                });
+            }
+
+            // 2. Blocked Items Risk
+            if (metrics.blockedTickets > 0) {
+                insights.push({
+                    type: 'risk',
+                    label: 'Blocked Items',
+                    value: `${metrics.blockedTickets} Ticket${metrics.blockedTickets > 1 ? 's' : ''}`,
+                    description: 'Require immediate attention to unblock'
+                });
+            } else {
+                insights.push({
+                    type: 'success',
+                    label: 'No Blockers',
+                    value: '0 Blocked',
+                    description: 'Team has clear path forward'
+                });
+            }
+
+            // 3. Active Work Insight
+            const activeWork = metrics.inProgressTickets + metrics.inReviewTickets;
+            if (activeWork > 0) {
+                insights.push({
+                    type: 'info',
+                    label: 'Active Work',
+                    value: `${activeWork} Ticket${activeWork > 1 ? 's' : ''}`,
+                    description: `${metrics.inProgressTickets} in progress, ${metrics.inReviewTickets} in review`
+                });
+            }
+
+            // 4. Top Performer or Epic Progress
+            const epicBreakdown = getEpicBreakdown(tickets);
+            if (epicBreakdown.length > 0) {
+                const topEpic = epicBreakdown[0];
+                const epicProgress = topEpic.total > 0 ? Math.round((topEpic.done / topEpic.total) * 100) : 0;
+                insights.push({
+                    type: epicProgress >= 70 ? 'success' : 'info',
+                    label: 'Focus Area',
+                    value: topEpic.epic,
+                    description: `${epicProgress}% complete (${topEpic.done}/${topEpic.total} tickets)`
+                });
+            }
+
+            return insights;
+        }
+
         // ===== UI RENDERING =====
         function renderMetrics(metrics) {
             const metricsGrid = document.getElementById('metricsGrid');
@@ -915,10 +1367,45 @@
             // Clear search box
             document.getElementById('searchBox').value = '';
 
+            // Update filter badge
+            updateFilterBadge();
+
             // Re-render with updated filter
             const metrics = calculateMetrics(allTickets);
             renderMetrics(metrics);
             renderIssueTable(filteredTickets);
+        }
+
+        function updateFilterBadge() {
+            const badge = document.getElementById('activeFilterBadge');
+            const filterText = document.getElementById('filterText');
+
+            if (activeFilter && activeFilter !== 'all') {
+                const filterNames = {
+                    'done': 'Showing: Completed',
+                    'in-progress': 'Showing: In Progress',
+                    'in-review': 'Showing: In Review',
+                    'todo': 'Showing: To Do',
+                    'blocked': 'Showing: Blocked'
+                };
+                filterText.textContent = filterNames[activeFilter] || 'Filter active';
+                badge.style.display = 'inline-flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function renderExecutiveSummary(tickets, metrics) {
+            const insights = generateExecutiveSummary(tickets, metrics);
+            const insightsGrid = document.getElementById('insightsGrid');
+
+            insightsGrid.innerHTML = insights.map(insight => `
+                <div class="insight-item ${insight.type}">
+                    <div class="insight-label">${insight.label}</div>
+                    <div class="insight-value">${insight.value}</div>
+                    <div class="insight-description">${insight.description}</div>
+                </div>
+            `).join('');
         }
 
         function renderStatusDonutChart(metrics) {
@@ -1152,6 +1639,7 @@
                 const sprintVelocity = getSprintVelocity(allTickets);
                 const narrative = generateNarrative(metrics);
 
+                renderExecutiveSummary(allTickets, metrics);
                 renderMetrics(metrics);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
@@ -1223,6 +1711,56 @@
             loadDefaultData();
         });
 
+        // Dark mode toggle
+        document.getElementById('darkModeBtn').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('darkModeBtn');
+            const isDark = document.body.classList.contains('dark-mode');
+            btn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+            // Save preference to localStorage
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        });
+
+        // Clear filter button
+        document.getElementById('clearFilterBtn').addEventListener('click', () => {
+            activeFilter = null;
+            filteredTickets = allTickets;
+            document.getElementById('searchBox').value = '';
+
+            updateFilterBadge();
+
+            const metrics = calculateMetrics(allTickets);
+            renderMetrics(metrics);
+            renderIssueTable(filteredTickets);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // P = Toggle presentation mode
+            if (e.key === 'p' || e.key === 'P') {
+                if (!e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    document.getElementById('presentationModeBtn').click();
+                }
+            }
+
+            // D = Toggle dark mode
+            if (e.key === 'd' || e.key === 'D') {
+                if (!e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+                    e.preventDefault();
+                    document.getElementById('darkModeBtn').click();
+                }
+            }
+
+            // Escape = Clear filters
+            if (e.key === 'Escape') {
+                if (activeFilter) {
+                    document.getElementById('clearFilterBtn').click();
+                }
+            }
+        });
+
         // File upload handlers
         const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
@@ -1267,6 +1805,14 @@
 
         // ===== INITIALIZATION =====
         window.addEventListener('DOMContentLoaded', () => {
+            // Load dark mode preference from localStorage
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeBtn').textContent = '☀️ Light Mode';
+            }
+
+            // Load data
             loadDefaultData();
         });
     </script>
