@@ -908,13 +908,13 @@
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Weekly Progress</div>
+                <div class="chart-title">Sprint Progress</div>
                 <div class="chart-container">
                     <canvas id="weeklyProgressChart"></canvas>
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Sprint Velocity</div>
+                <div class="chart-title">Current Sprint Metrics</div>
                 <div class="chart-container">
                     <canvas id="sprintVelocityChart"></canvas>
                 </div>
@@ -1104,95 +1104,76 @@
             return Array.from(epicMap.values()).sort((a, b) => b.total - a.total);
         }
 
-        function getWeeklyProgress(tickets) {
-            if (tickets.length === 0) return [];
+        function getSprintProgress(tickets) {
+            if (tickets.length === 0) return { sprintNumber: 'N/A', data: [] };
 
-            const allDates = tickets
-                .flatMap(t => [t.created, t.updated].filter(Boolean))
-                .map(d => new Date(d))
-                .filter(d => !isNaN(d.getTime()));
+            // Get sprint number from tickets (use most common sprint value)
+            const sprintNumbers = tickets
+                .map(t => t.sprint)
+                .filter(Boolean);
 
-            if (allDates.length === 0) {
-                // Fallback: 6 weeks of data
-                const totalTickets = tickets.length;
-                const doneTickets = tickets.filter(t => t.status === 'Done').length;
-                const progressPerWeek = Math.floor((doneTickets / totalTickets) * 100 / 6);
-
-                return Array.from({ length: 6 }, (_, i) => ({
-                    week: `Week ${i + 1}`,
-                    completed: Math.min((i + 1) * progressPerWeek, Math.round((doneTickets / totalTickets) * 100)),
-                    planned: i < 5 ? (i + 1) * 20 : null
-                }));
-            }
-
-            const minDate = new Date(Math.min(...allDates.map(d => d.getTime())));
-            const maxDate = new Date(Math.max(...allDates.map(d => d.getTime())));
-            const startDate = new Date(minDate);
-            startDate.setDate(startDate.getDate() - startDate.getDay());
-            startDate.setHours(0, 0, 0, 0);
-
-            const daysDiff = Math.ceil((maxDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-            const numWeeks = Math.min(Math.ceil(daysDiff / 7), 12);
-            const weeklyData = [];
-            const totalTickets = tickets.length;
-
-            for (let i = 0; i < numWeeks; i++) {
-                const weekEndDate = new Date(startDate);
-                weekEndDate.setDate(weekEndDate.getDate() + (i + 1) * 7);
-
-                const completedByWeek = tickets.filter(t => {
-                    if (t.status !== 'Done' || !t.updated) return false;
-                    const updatedDate = new Date(t.updated);
-                    return updatedDate <= weekEndDate;
-                }).length;
-
-                const completionPercent = totalTickets > 0 ? Math.round((completedByWeek / totalTickets) * 100) : 0;
-                const plannedPercent = i < numWeeks - 1 ? Math.round(((i + 1) / numWeeks) * 100) : null;
-
-                weeklyData.push({
-                    week: `Week ${i + 1}`,
-                    completed: completionPercent,
-                    planned: plannedPercent
+            let sprintNumber = 'Current Sprint';
+            if (sprintNumbers.length > 0) {
+                // Find most common sprint number
+                const sprintCounts = {};
+                sprintNumbers.forEach(s => {
+                    sprintCounts[s] = (sprintCounts[s] || 0) + 1;
                 });
+                sprintNumber = Object.keys(sprintCounts).reduce((a, b) =>
+                    sprintCounts[a] > sprintCounts[b] ? a : b
+                );
             }
 
-            return weeklyData;
+            // Calculate current completion
+            const totalTickets = tickets.length;
+            const doneTickets = tickets.filter(t => t.status === 'Done').length;
+            const completionPercent = totalTickets > 0 ? Math.round((doneTickets / totalTickets) * 100) : 0;
+
+            // Return simple 3-point progress data
+            return {
+                sprintNumber,
+                data: [
+                    { label: 'Start', value: 0 },
+                    { label: 'Current', value: completionPercent },
+                    { label: 'Target', value: 100 }
+                ]
+            };
         }
 
-        function getSprintVelocity(tickets) {
-            if (tickets.length === 0) return [];
+        function getCurrentSprintMetrics(tickets) {
+            if (tickets.length === 0) return { sprintNumber: 'N/A', committed: 0, completed: 0 };
 
+            // Get sprint number from tickets
+            const sprintNumbers = tickets
+                .map(t => t.sprint)
+                .filter(Boolean);
+
+            let sprintNumber = 'Current Sprint';
+            if (sprintNumbers.length > 0) {
+                const sprintCounts = {};
+                sprintNumbers.forEach(s => {
+                    sprintCounts[s] = (sprintCounts[s] || 0) + 1;
+                });
+                sprintNumber = Object.keys(sprintCounts).reduce((a, b) =>
+                    sprintCounts[a] > sprintCounts[b] ? a : b
+                );
+            }
+
+            // Calculate totals (use story points if available, otherwise ticket count)
             const totalPoints = tickets.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
             const completedPoints = tickets.filter(t => t.status === 'Done').reduce((sum, t) => sum + (t.storyPoints || 0), 0);
 
             const useTicketCount = totalPoints === 0;
             const committed = useTicketCount ? tickets.length : totalPoints;
             const completed = useTicketCount ? tickets.filter(t => t.status === 'Done').length : completedPoints;
+            const unit = useTicketCount ? 'Tickets' : 'Story Points';
 
-            // Generate 6 sprints with some historical data
-            const avgVelocity = Math.round(completed * 0.9);
-            const velocityData = [];
-
-            for (let i = 0; i < 5; i++) {
-                const variance = Math.round(avgVelocity * (Math.random() * 0.2 - 0.1));
-                const sprintCommitted = avgVelocity + variance;
-                const sprintCompleted = Math.round(sprintCommitted * (0.85 + Math.random() * 0.15));
-
-                velocityData.push({
-                    sprint: `Spr ${9 + i}`,
-                    committed: Math.max(sprintCommitted, 0),
-                    completed: Math.max(sprintCompleted, 0)
-                });
-            }
-
-            // Add current sprint
-            velocityData.push({
-                sprint: 'Spr 14',
+            return {
+                sprintNumber,
                 committed,
-                completed
-            });
-
-            return velocityData;
+                completed,
+                unit
+            };
         }
 
         function generateNarrative(metrics) {
@@ -1504,34 +1485,38 @@
             });
         }
 
-        function renderWeeklyProgressChart(weeklyData) {
+        function renderSprintProgressChart(sprintProgress) {
             const ctx = document.getElementById('weeklyProgressChart');
 
             if (charts.weeklyProgress) {
                 charts.weeklyProgress.destroy();
             }
 
+            // Update chart title
+            const chartTitle = document.querySelector('#chartsSection .chart-card:nth-child(3) .chart-title');
+            if (chartTitle) {
+                chartTitle.textContent = `Sprint ${sprintProgress.sprintNumber} Progress`;
+            }
+
             charts.weeklyProgress = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: weeklyData.map(d => d.week),
+                    labels: sprintProgress.data.map(d => d.label),
                     datasets: [
                         {
-                            label: 'Completed',
-                            data: weeklyData.map(d => d.completed),
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Planned',
-                            data: weeklyData.map(d => d.planned),
-                            borderColor: '#6b7280',
-                            backgroundColor: 'transparent',
-                            borderDash: [5, 5],
-                            fill: false,
-                            tension: 0.4
+                            label: 'Completion %',
+                            data: sprintProgress.data.map(d => d.value),
+                            backgroundColor: [
+                                '#e5e7eb',  // Start - gray
+                                '#3b82f6',  // Current - blue
+                                '#10b981'   // Target - green
+                            ],
+                            borderWidth: 2,
+                            borderColor: [
+                                '#9ca3af',
+                                '#2563eb',
+                                '#059669'
+                            ]
                         }
                     ]
                 },
@@ -1549,33 +1534,39 @@
                     },
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            display: false
                         }
                     }
                 }
             });
         }
 
-        function renderSprintVelocityChart(velocityData) {
+        function renderCurrentSprintChart(sprintMetrics) {
             const ctx = document.getElementById('sprintVelocityChart');
 
             if (charts.sprintVelocity) {
                 charts.sprintVelocity.destroy();
             }
 
+            // Update chart title
+            const chartTitle = document.querySelector('#chartsSection .chart-card:nth-child(4) .chart-title');
+            if (chartTitle) {
+                chartTitle.textContent = `Sprint ${sprintMetrics.sprintNumber} - ${sprintMetrics.unit}`;
+            }
+
             charts.sprintVelocity = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: velocityData.map(d => d.sprint),
+                    labels: [sprintMetrics.sprintNumber],
                     datasets: [
                         {
                             label: 'Committed',
-                            data: velocityData.map(d => d.committed),
+                            data: [sprintMetrics.committed],
                             backgroundColor: '#6b7280'
                         },
                         {
                             label: 'Completed',
-                            data: velocityData.map(d => d.completed),
+                            data: [sprintMetrics.completed],
                             backgroundColor: '#10b981'
                         }
                     ]
@@ -1585,7 +1576,11 @@
                     maintainAspectRatio: false,
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: sprintMetrics.unit
+                            }
                         }
                     },
                     plugins: {
@@ -1632,16 +1627,16 @@
 
                 const metrics = calculateMetrics(allTickets);
                 const epicBreakdown = getEpicBreakdown(allTickets);
-                const weeklyProgress = getWeeklyProgress(allTickets);
-                const sprintVelocity = getSprintVelocity(allTickets);
+                const sprintProgress = getSprintProgress(allTickets);
+                const sprintMetrics = getCurrentSprintMetrics(allTickets);
                 const narrative = generateNarrative(metrics);
 
                 renderExecutiveSummary(allTickets, metrics);
                 renderMetrics(metrics);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
-                renderWeeklyProgressChart(weeklyProgress);
-                renderSprintVelocityChart(sprintVelocity);
+                renderSprintProgressChart(sprintProgress);
+                renderCurrentSprintChart(sprintMetrics);
                 renderIssueTable(allTickets);
 
                 document.getElementById('narrativeText').textContent = narrative;
