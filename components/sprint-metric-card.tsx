@@ -6,6 +6,8 @@ interface SprintMetricCardProps {
   value: string | number
   subtitle?: string
   color?: 'default' | 'green' | 'blue' | 'yellow' | 'red'
+  onClick?: () => void
+  isActive?: boolean
 }
 
 const colorClasses = {
@@ -24,9 +26,16 @@ const subtitleColors = {
   red: 'text-rose-600',
 }
 
-export function SprintMetricCard({ label, value, subtitle, color = 'default' }: SprintMetricCardProps) {
+export function SprintMetricCard({ label, value, subtitle, color = 'default', onClick, isActive = false }: SprintMetricCardProps) {
   return (
-    <Card className="bg-white border-slate-200">
+    <Card
+      className={cn(
+        'bg-white border-slate-200 transition-all',
+        onClick && 'cursor-pointer hover:shadow-lg hover:scale-105',
+        isActive && 'ring-2 ring-blue-500 shadow-lg'
+      )}
+      onClick={onClick}
+    >
       <div className="p-5">
         <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
           {label}

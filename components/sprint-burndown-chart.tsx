@@ -2,18 +2,13 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { WeeklyProgressData } from '@/lib/metrics'
 
-// Weekly progress data showing completion percentage over weeks
-const weeklyProgressData = [
-  { week: 'Week 1', completed: 15, planned: 20 },
-  { week: 'Week 2', completed: 32, planned: 40 },
-  { week: 'Week 3', completed: 48, planned: 60 },
-  { week: 'Week 4', completed: 62, planned: 80 },
-  { week: 'Week 5', completed: 75, planned: 100 },
-  { week: 'Week 6', completed: 85, planned: null },
-]
+interface SprintBurndownChartProps {
+  data: WeeklyProgressData[]
+}
 
-export function SprintBurndownChart() {
+export function SprintBurndownChart({ data }: SprintBurndownChartProps) {
   return (
     <Card>
       <CardHeader>
@@ -26,7 +21,7 @@ export function SprintBurndownChart() {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={280}>
-          <AreaChart data={weeklyProgressData}>
+          <AreaChart data={data}>
             <defs>
               <linearGradient id="colorCompleted" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>

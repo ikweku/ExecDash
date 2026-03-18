@@ -27,7 +27,7 @@ import { SprintVelocityChart } from '@/components/sprint-velocity-chart'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { parseCSV } from '@/lib/csv-parser'
-import { normalizeTickets } from '@/lib/status-normalizer'
+import { normalizeTickets, parseSprintInfo } from '@/lib/status-normalizer'
 import {
   calculateMetrics,
   getEpicBreakdown,
@@ -38,9 +38,11 @@ import {
   getRecentlyCompleted,
   getRecentlyUpdated,
   generateNarrative,
+  getWeeklyProgress,
+  getSprintVelocity,
 } from '@/lib/metrics'
 import { sampleTickets } from '@/lib/sample-data'
-import { NormalizedTicket } from '@/types'
+import { NormalizedTicket, SprintInfo } from '@/types'
 
 export default function DashboardPage() {
   const [tickets, setTickets] = useState<NormalizedTicket[]>([])
@@ -48,6 +50,8 @@ export default function DashboardPage() {
   const [presentationMode, setPresentationMode] = useState(false)
   const [hasUploadedData, setHasUploadedData] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [sprintInfo, setSprintInfo] = useState<SprintInfo | null>(null)
+  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'in-progress' | 'in-review' | 'blocked' | 'todo'>('all')
 
   // Load CSV data from /data/latest.csv on initial mount
   useEffect(() => {
@@ -92,6 +96,10 @@ export default function DashboardPage() {
       const normalized = normalizeTickets(parsedTickets)
       setTickets(normalized)
       setHasUploadedData(true)
+
+      // Parse sprint info from filename (e.g., "Sprint 11 - 03-17-26.csv")
+      const sprint = parseSprintInfo(file.name)
+      setSprintInfo(sprint)
     } catch (error) {
       console.error('Error parsing CSV:', error)
       alert('Error parsing CSV file. Please check the file format.')
@@ -106,6 +114,30 @@ export default function DashboardPage() {
     setHasUploadedData(false)
   }
 
+  const handleStatusFilter = (filter: 'all' | 'completed' | 'in-progress' | 'in-review' | 'blocked' | 'todo') => {
+    setStatusFilter(filter === statusFilter ? 'all' : filter)
+  }
+
+  // Filter tickets based on selected status
+  const filteredTickets = statusFilter === 'all'
+    ? tickets
+    : tickets.filter(ticket => {
+        switch (statusFilter) {
+          case 'completed':
+            return ticket.status === 'Done'
+          case 'in-progress':
+            return ticket.status === 'In Progress'
+          case 'in-review':
+            return ticket.status === 'In Review'
+          case 'blocked':
+            return ticket.status === 'Blocked'
+          case 'todo':
+            return ticket.status === 'To Do'
+          default:
+            return true
+        }
+      })
+
   // Calculate all metrics
   const metrics = calculateMetrics(tickets)
   const epicBreakdown = getEpicBreakdown(tickets)
@@ -116,6 +148,8 @@ export default function DashboardPage() {
   const recentlyCompleted = getRecentlyCompleted(tickets, 5)
   const recentlyUpdated = getRecentlyUpdated(tickets, 5)
   const narrative = generateNarrative(metrics)
+  const weeklyProgress = getWeeklyProgress(tickets)
+  const sprintVelocity = getSprintVelocity(tickets)
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -138,9 +172,9 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-3">
               <select className="bg-indigo-800/50 border border-indigo-700 text-white text-sm rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option>Sprint 14 (Current)</option>
-                <option>Sprint 13</option>
-                <option>Sprint 12</option>
+                <option>Sprint {sprintInfo?.sprintNumber || 14} (Current)</option>
+                <option>Sprint {(sprintInfo?.sprintNumber || 14) - 1}</option>
+                <option>Sprint {(sprintInfo?.sprintNumber || 14) - 2}</option>
               </select>
               <select className="bg-indigo-800/50 border border-indigo-700 text-white text-sm rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option>All Statuses</option>
@@ -154,9 +188,6 @@ export default function DashboardPage() {
                 <option>Medium</option>
                 <option>Low</option>
               </select>
-              <div className="text-sm text-indigo-200 bg-indigo-800/30 px-3 py-1.5 rounded">
-                R2 - March 2026
-              </div>
               {!presentationMode && (
                 <Button
                   variant="outline"
@@ -177,16 +208,16 @@ export default function DashboardPage() {
           <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12 pb-3 border-t border-indigo-800/50 pt-3">
             <div className="flex items-center justify-between text-sm mb-2">
               <div className="text-indigo-300 font-semibold text-xs uppercase tracking-wider">
-                Sprint 14 Progress
+                Sprint {sprintInfo?.sprintNumber || 14} Progress
               </div>
               <div className="text-indigo-300 text-xs">
-                Day 7 of 10 &nbsp;&nbsp; 3 days remaining
+                {metrics.doneTickets} of {metrics.totalTickets} completed &nbsp;&nbsp; {metrics.percentComplete}%
               </div>
             </div>
             <div className="h-2 bg-indigo-800 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500"
-                style={{ width: '70%' }}
+                style={{ width: `${metrics.percentComplete}%` }}
               />
             </div>
           </div>
@@ -220,30 +251,40 @@ export default function DashboardPage() {
                   label="TOTAL ISSUES"
                   value={metrics.totalTickets}
                   subtitle="across selection"
+                  onClick={() => handleStatusFilter('all')}
+                  isActive={statusFilter === 'all'}
                 />
                 <SprintMetricCard
                   label="COMPLETED"
                   value={metrics.doneTickets}
                   subtitle={`${metrics.percentComplete}% of issues`}
                   color="green"
+                  onClick={() => handleStatusFilter('completed')}
+                  isActive={statusFilter === 'completed'}
                 />
                 <SprintMetricCard
                   label="IN PROGRESS"
                   value={metrics.inProgressTickets}
                   subtitle="active development"
                   color="blue"
+                  onClick={() => handleStatusFilter('in-progress')}
+                  isActive={statusFilter === 'in-progress'}
                 />
                 <SprintMetricCard
                   label="IN REVIEW"
-                  value={0}
+                  value={metrics.inReviewTickets}
                   subtitle="awaiting review"
                   color="yellow"
+                  onClick={() => handleStatusFilter('in-review')}
+                  isActive={statusFilter === 'in-review'}
                 />
                 <SprintMetricCard
                   label="BLOCKED"
                   value={metrics.blockedTickets}
                   subtitle="needs escalation"
                   color="red"
+                  onClick={() => handleStatusFilter('blocked')}
+                  isActive={statusFilter === 'blocked'}
                 />
                 <SprintMetricCard
                   label="POINTS DONE"
@@ -260,15 +301,38 @@ export default function DashboardPage() {
                 <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider">ANALYTICS</h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <SprintBurndownChart />
+                <SprintBurndownChart data={weeklyProgress} />
                 <StatusDonutChart data={statusDistribution} />
-                <SprintVelocityChart />
+                <SprintVelocityChart data={sprintVelocity} />
                 <AssigneeBreakdownChart data={assigneeBreakdown} />
               </div>
             </div>
 
             {/* Issue Tracker Table */}
-            <IssueTrackerTable tickets={tickets} />
+            <div>
+              {statusFilter !== 'all' && (
+                <div className="mb-4 flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-medium text-blue-900">
+                      Showing {filteredTickets.length} {
+                        statusFilter === 'completed' ? 'completed' :
+                        statusFilter === 'in-progress' ? 'in progress' :
+                        statusFilter === 'in-review' ? 'in review' :
+                        statusFilter === 'blocked' ? 'blocked' :
+                        statusFilter === 'todo' ? 'to do' : ''
+                      } issue{filteredTickets.length !== 1 ? 's' : ''}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setStatusFilter('all')}
+                    className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    Clear filter
+                  </button>
+                </div>
+              )}
+              <IssueTrackerTable tickets={filteredTickets} />
+            </div>
           </div>
         )}
       </main>

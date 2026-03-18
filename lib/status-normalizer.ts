@@ -1,4 +1,4 @@
-import { NormalizedStatus, JiraTicket, NormalizedTicket } from '@/types'
+import { NormalizedStatus, JiraTicket, NormalizedTicket, SprintInfo } from '@/types'
 
 const statusMap: Record<string, NormalizedStatus> = {
   // Done variations
@@ -11,13 +11,17 @@ const statusMap: Record<string, NormalizedStatus> = {
 
   // In Progress variations
   'in progress': 'In Progress',
-  'in review': 'In Progress',
-  'qa': 'In Progress',
-  'testing': 'In Progress',
   'in development': 'In Progress',
   'dev': 'In Progress',
   'development': 'In Progress',
-  'code review': 'In Progress',
+
+  // In Review variations
+  'in review': 'In Review',
+  'in testing': 'In Review',
+  'qa': 'In Review',
+  'testing': 'In Review',
+  'code review': 'In Review',
+  'review': 'In Review',
 
   // To Do variations
   'to do': 'To Do',
@@ -47,4 +51,28 @@ export function normalizeTickets(tickets: JiraTicket[]): NormalizedTicket[] {
     normalizedStatus: normalizeStatus(ticket.status),
     status: normalizeStatus(ticket.status),
   }))
+}
+
+export function parseSprintInfo(fileName: string): SprintInfo | null {
+  // Expected format: "Sprint 11 - 03-17-26.csv" or similar
+  const sprintPattern = /Sprint\s+(\d+)\s*-\s*(\d{2}-\d{2}-\d{2})/i
+  const match = fileName.match(sprintPattern)
+
+  if (match) {
+    const sprintNumber = parseInt(match[1], 10)
+    const dateStr = match[2] // MM-DD-YY format
+
+    // Parse the date (MM-DD-YY)
+    const [month, day, year] = dateStr.split('-')
+    const fullYear = `20${year}` // Convert YY to 20YY
+    const date = `${fullYear}-${month}-${day}` // ISO format
+
+    return {
+      sprintNumber,
+      date,
+      fileName,
+    }
+  }
+
+  return null
 }

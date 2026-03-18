@@ -1,28 +1,28 @@
 Issue Key,Summary,Status,Assignee,Priority,Epic,Created,Updated,Due Date,Story Points
-GER-101,Implement user authentication system,Done,Sarah Chen,High,Authentication,2026-01-15,2026-03-10,2026-03-15,8
-GER-102,Add OAuth integration for Google,Done,Sarah Chen,High,Authentication,2026-01-20,2026-03-12,2026-03-20,5
+GER-101,Implement user authentication system,Completed,Sarah Chen,High,Authentication,2026-01-15,2026-03-10,2026-03-15,8
+GER-102,Add OAuth integration for Google,Resolved,Sarah Chen,High,Authentication,2026-01-20,2026-03-12,2026-03-20,5
 GER-103,Create password reset flow,In Progress,Sarah Chen,Medium,Authentication,2026-02-01,2026-03-16,2026-03-25,3
-GER-104,Add two-factor authentication,To Do,Sarah Chen,Medium,Authentication,2026-02-10,2026-02-10,2026-04-01,5
-GER-201,Design executive dashboard wireframes,Done,Marcus Rodriguez,High,Dashboard,2026-01-10,2026-02-28,2026-03-01,3
-GER-202,Build KPI cards component,Done,Marcus Rodriguez,High,Dashboard,2026-02-01,2026-03-05,2026-03-10,5
-GER-203,Implement charts with Recharts,Done,Emily Watson,High,Dashboard,2026-02-05,2026-03-14,2026-03-15,8
+GER-104,Add two-factor authentication,New,Sarah Chen,Medium,Authentication,2026-02-10,2026-02-10,2026-04-01,5
+GER-201,Design executive dashboard wireframes,Completed,Marcus Rodriguez,High,Dashboard,2026-01-10,2026-02-28,2026-03-01,3
+GER-202,Build KPI cards component,Resolved,Marcus Rodriguez,High,Dashboard,2026-02-01,2026-03-05,2026-03-10,5
+GER-203,Implement charts with Recharts,Completed,Emily Watson,High,Dashboard,2026-02-05,2026-03-14,2026-03-15,8
 GER-204,Add real-time data updates,In Progress,Emily Watson,Medium,Dashboard,2026-02-15,2026-03-17,2026-03-30,5
-GER-205,Create export to PDF functionality,To Do,Marcus Rodriguez,Low,Dashboard,2026-02-20,2026-02-20,2026-04-15,3
-GER-301,Design REST API architecture,Done,James Kim,High,API Integration,2026-01-05,2026-02-15,2026-02-20,5
-GER-302,Implement Jira API connector,Done,James Kim,High,API Integration,2026-01-25,2026-03-08,2026-03-10,8
-GER-303,Add error handling and retry logic,Done,James Kim,High,API Integration,2026-02-10,2026-03-11,2026-03-15,5
+GER-205,Create export to PDF functionality,New,Marcus Rodriguez,Low,Dashboard,2026-02-20,2026-02-20,2026-04-15,3
+GER-301,Design REST API architecture,Completed,James Kim,High,API Integration,2026-01-05,2026-02-15,2026-02-20,5
+GER-302,Implement Jira API connector,Resolved,James Kim,High,API Integration,2026-01-25,2026-03-08,2026-03-10,8
+GER-303,Add error handling and retry logic,In Testing,James Kim,High,API Integration,2026-02-10,2026-03-11,2026-03-15,5
 GER-304,Implement rate limiting,In Progress,James Kim,Medium,API Integration,2026-02-20,2026-03-15,2026-03-25,3
 GER-305,Add webhook support,Blocked,James Kim,Medium,API Integration,2026-02-25,2026-03-10,2026-03-30,5
-GER-401,Set up React Native project,Done,Priya Patel,High,Mobile App,2026-01-08,2026-02-05,2026-02-10,3
-GER-402,Design mobile dashboard UI,Done,Priya Patel,High,Mobile App,2026-01-15,2026-02-20,2026-02-25,5
+GER-401,Set up React Native project,Completed,Priya Patel,High,Mobile App,2026-01-08,2026-02-05,2026-02-10,3
+GER-402,Design mobile dashboard UI,Resolved,Priya Patel,High,Mobile App,2026-01-15,2026-02-20,2026-02-25,5
 GER-403,Implement offline mode,In Progress,Priya Patel,Medium,Mobile App,2026-02-01,2026-03-16,2026-03-20,8
-GER-404,Add push notifications,To Do,Priya Patel,Medium,Mobile App,2026-02-10,2026-02-10,2026-04-01,5
+GER-404,Add push notifications,In Testing,Priya Patel,Medium,Mobile App,2026-02-10,2026-03-16,2026-04-01,5
 GER-405,Submit to App Store,Blocked,Priya Patel,High,Mobile App,2026-02-15,2026-03-01,2026-04-15,2
-GER-501,Set up automated testing framework,Done,Alex Thompson,High,Testing,2026-01-12,2026-02-25,2026-03-01,5
-GER-502,Write unit tests for authentication,Done,Alex Thompson,High,Testing,2026-02-05,2026-03-13,2026-03-15,8
+GER-501,Set up automated testing framework,Completed,Alex Thompson,High,Testing,2026-01-12,2026-02-25,2026-03-01,5
+GER-502,Write unit tests for authentication,In Testing,Alex Thompson,High,Testing,2026-02-05,2026-03-16,2026-03-15,8
 GER-503,Write integration tests for API,In Progress,Alex Thompson,High,Testing,2026-02-15,2026-03-17,2026-03-25,8
-GER-504,Perform security audit,To Do,Alex Thompson,High,Testing,2026-02-20,2026-02-20,2026-04-01,5
-GER-601,Write API documentation,Done,Lisa Anderson,Medium,Documentation,2026-01-18,2026-03-09,2026-03-10,3
-GER-602,Create user guide,Done,Lisa Anderson,Medium,Documentation,2026-02-01,2026-03-14,2026-03-15,5
+GER-504,Perform security audit,New,Alex Thompson,High,Testing,2026-02-20,2026-02-20,2026-04-01,5
+GER-601,Write API documentation,Completed,Lisa Anderson,Medium,Documentation,2026-01-18,2026-03-09,2026-03-10,3
+GER-602,Create user guide,Resolved,Lisa Anderson,Medium,Documentation,2026-02-01,2026-03-14,2026-03-15,5
 GER-603,Record demo videos,In Progress,Lisa Anderson,Low,Documentation,2026-02-10,2026-03-16,2026-03-30,3
-GER-604,Update README and contribution guide,To Do,Lisa Anderson,Low,Documentation,2026-02-20,2026-02-20,2026-04-10,2
+GER-604,Update README and contribution guide,New,Lisa Anderson,Low,Documentation,2026-02-20,2026-02-20,2026-04-10,2

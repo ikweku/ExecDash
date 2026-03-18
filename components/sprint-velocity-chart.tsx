@@ -2,17 +2,13 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { SprintVelocityData } from '@/lib/metrics'
 
-const velocityData = [
-  { sprint: 'Spr 9', committed: 45, completed: 42 },
-  { sprint: 'Spr 10', committed: 50, completed: 45 },
-  { sprint: 'Spr 11', committed: 55, completed: 52 },
-  { sprint: 'Spr 12', committed: 52, completed: 48 },
-  { sprint: 'Spr 13', committed: 58, completed: 55 },
-  { sprint: 'Spr 14', committed: 60, completed: 28 },
-]
+interface SprintVelocityChartProps {
+  data: SprintVelocityData[]
+}
 
-export function SprintVelocityChart() {
+export function SprintVelocityChart({ data }: SprintVelocityChartProps) {
   return (
     <Card>
       <CardHeader>
@@ -25,7 +21,7 @@ export function SprintVelocityChart() {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={velocityData}>
+          <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
             <XAxis
               dataKey="sprint"
