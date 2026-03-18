@@ -15,7 +15,7 @@
 
 # production
 /build
-/docs
+# /docs  # Commented out - needed for GitHub Pages deployment
 
 # misc
 .DS_Store
