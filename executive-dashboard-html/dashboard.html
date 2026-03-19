@@ -996,9 +996,9 @@
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Sprint Progress</div>
+                <div class="chart-title">Sprint Velocity Trend</div>
                 <div class="chart-container">
-                    <canvas id="weeklyProgressChart"></canvas>
+                    <canvas id="sprintVelocityTrendChart"></canvas>
                 </div>
             </div>
             <div class="chart-card">
@@ -1874,6 +1874,117 @@
             });
         }
 
+        function renderSprintVelocityTrendChart(tickets) {
+            const ctx = document.getElementById('sprintVelocityTrendChart');
+
+            if (charts.sprintVelocityTrend) {
+                charts.sprintVelocityTrend.destroy();
+            }
+
+            // Group tickets by sprint
+            const sprintMap = new Map();
+            tickets.forEach(ticket => {
+                const sprint = ticket.sprint || 'No Sprint';
+                if (!sprintMap.has(sprint)) {
+                    sprintMap.set(sprint, {
+                        total: 0,
+                        done: 0
+                    });
+                }
+                const data = sprintMap.get(sprint);
+                data.total++;
+                if (ticket.status === 'Done') {
+                    data.done++;
+                }
+            });
+
+            // Sort sprints and calculate completion percentages
+            const sprints = Array.from(sprintMap.entries())
+                .filter(([sprint, _]) => sprint !== 'No Sprint')
+                .sort((a, b) => {
+                    // Try to sort numerically if sprint names contain numbers
+                    const numA = parseInt(a[0].match(/\d+/)?.[0] || '0');
+                    const numB = parseInt(b[0].match(/\d+/)?.[0] || '0');
+                    return numA - numB;
+                });
+
+            const labels = sprints.map(s => s[0]);
+            const completionData = sprints.map(s => {
+                const completion = s[1].total > 0 ? Math.round((s[1].done / s[1].total) * 100) : 0;
+                return completion;
+            });
+            const totalData = sprints.map(s => s[1].total);
+
+            charts.sprintVelocityTrend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Completion %',
+                            data: completionData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Total Tickets',
+                            data: totalData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Completion %'
+                            },
+                            ticks: {
+                                callback: value => value + '%'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Total Tickets'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
         function renderIssueTable(tickets) {
             const tbody = document.getElementById('issueTableBody');
 
@@ -1926,7 +2037,7 @@
                 renderMetrics(metrics);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
-                renderSprintProgressChart(sprintProgress);
+                renderSprintVelocityTrendChart(allTickets);
                 renderCurrentSprintChart(sprintMetrics);
                 renderAssigneeBreakdownChart(allTickets);
                 renderPriorityDistributionChart(allTickets);
