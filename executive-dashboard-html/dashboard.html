@@ -133,18 +133,12 @@
             transition: width 0.3s ease;
         }
 
-        /* Metric cards grid - 3 columns, 2 rows */
+        /* Metric cards grid - single row, auto-fit */
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
             margin-bottom: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .metrics-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         .metric-card {
@@ -1013,6 +1007,18 @@
                     <canvas id="sprintVelocityChart"></canvas>
                 </div>
             </div>
+            <div class="chart-card">
+                <div class="chart-title">Assignee Breakdown</div>
+                <div class="chart-container">
+                    <canvas id="assigneeBreakdownChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-title">Priority Distribution</div>
+                <div class="chart-container">
+                    <canvas id="priorityDistributionChart"></canvas>
+                </div>
+            </div>
         </div>
 
         <!-- Executive Narrative -->
@@ -1724,6 +1730,150 @@
             });
         }
 
+        function renderAssigneeBreakdownChart(tickets) {
+            const ctx = document.getElementById('assigneeBreakdownChart');
+
+            if (charts.assigneeBreakdown) {
+                charts.assigneeBreakdown.destroy();
+            }
+
+            // Count tickets per assignee
+            const assigneeMap = new Map();
+            tickets.forEach(ticket => {
+                const assignee = ticket.assignee || 'Unassigned';
+                if (!assigneeMap.has(assignee)) {
+                    assigneeMap.set(assignee, {
+                        done: 0,
+                        inProgress: 0,
+                        inReview: 0,
+                        todo: 0,
+                        blocked: 0,
+                        total: 0
+                    });
+                }
+
+                const data = assigneeMap.get(assignee);
+                data.total++;
+
+                switch (ticket.status) {
+                    case 'Done': data.done++; break;
+                    case 'In Progress': data.inProgress++; break;
+                    case 'In Review': data.inReview++; break;
+                    case 'To Do': data.todo++; break;
+                    case 'Blocked': data.blocked++; break;
+                }
+            });
+
+            // Sort by total and take top 6
+            const assignees = Array.from(assigneeMap.entries())
+                .sort((a, b) => b[1].total - a[1].total)
+                .slice(0, 6);
+
+            charts.assigneeBreakdown = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: assignees.map(a => a[0]),
+                    datasets: [
+                        {
+                            label: 'Done',
+                            data: assignees.map(a => a[1].done),
+                            backgroundColor: '#10b981'
+                        },
+                        {
+                            label: 'In Progress',
+                            data: assignees.map(a => a[1].inProgress),
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'In Review',
+                            data: assignees.map(a => a[1].inReview),
+                            backgroundColor: '#f59e0b'
+                        },
+                        {
+                            label: 'To Do',
+                            data: assignees.map(a => a[1].todo),
+                            backgroundColor: '#6b7280'
+                        },
+                        {
+                            label: 'Blocked',
+                            data: assignees.map(a => a[1].blocked),
+                            backgroundColor: '#ef4444'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPriorityDistributionChart(tickets) {
+            const ctx = document.getElementById('priorityDistributionChart');
+
+            if (charts.priorityDistribution) {
+                charts.priorityDistribution.destroy();
+            }
+
+            // Count tickets by priority
+            const priorityMap = new Map();
+            tickets.forEach(ticket => {
+                const priority = ticket.priority || 'Not Set';
+                priorityMap.set(priority, (priorityMap.get(priority) || 0) + 1);
+            });
+
+            const priorityOrder = ['High', 'Medium', 'Low', 'Not Set'];
+            const priorityColors = {
+                'High': '#ef4444',
+                'Medium': '#f59e0b',
+                'Low': '#10b981',
+                'Not Set': '#6b7280'
+            };
+
+            const data = priorityOrder
+                .map(priority => ({
+                    name: priority,
+                    value: priorityMap.get(priority) || 0,
+                    color: priorityColors[priority]
+                }))
+                .filter(item => item.value > 0);
+
+            charts.priorityDistribution = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: data.map(d => d.color),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
         function renderIssueTable(tickets) {
             const tbody = document.getElementById('issueTableBody');
 
@@ -1778,6 +1928,8 @@
                 renderEpicBreakdownChart(epicBreakdown);
                 renderSprintProgressChart(sprintProgress);
                 renderCurrentSprintChart(sprintMetrics);
+                renderAssigneeBreakdownChart(allTickets);
+                renderPriorityDistributionChart(allTickets);
                 renderIssueTable(allTickets);
 
                 document.getElementById('narrativeText').textContent = narrative;
