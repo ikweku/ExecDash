@@ -133,12 +133,18 @@
             transition: width 0.3s ease;
         }
 
-        /* Metric cards grid */
+        /* Metric cards grid - 3 columns, 2 rows */
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .metric-card {
@@ -1124,7 +1130,7 @@
                     complete: (results) => {
                         const tickets = results.data.map(row => {
                             // Flexible header mapping
-                            const issueKey = row['Issue Key'] || row['Key'] || row['Issue ID'] || '';
+                            const issueKey = row['Issue key'] || row['Issue Key'] || row['Key'] || row['Issue ID'] || '';
                             const summary = row['Summary'] || row['Title'] || row['Description'] || '';
                             const status = row['Status'] || row['State'] || '';
                             const assignee = row['Assignee'] || row['Assigned To'] || '';
