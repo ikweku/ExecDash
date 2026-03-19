@@ -242,17 +242,17 @@
             z-index: 1;
         }
 
-        /* Charts grid - 3 columns, 2 rows */
+        /* Charts grid - 2 columns per row, 2nd column wider */
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1.5fr;
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1024px) {
             .charts-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
             }
         }
 
@@ -996,27 +996,15 @@
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Critical Path</div>
-                <div class="chart-container">
-                    <canvas id="criticalPathChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-card">
                 <div class="chart-title">Current Sprint Metrics</div>
                 <div class="chart-container">
                     <canvas id="sprintVelocityChart"></canvas>
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Assignee Breakdown</div>
-                <div class="chart-container">
-                    <canvas id="assigneeBreakdownChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">Priority Distribution</div>
-                <div class="chart-container">
-                    <canvas id="priorityDistributionChart"></canvas>
+                <div class="chart-title">Critical Path</div>
+                <div id="criticalPathTable" style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
+                    <!-- Critical path table will be inserted here -->
                 </div>
             </div>
         </div>
@@ -1912,12 +1900,8 @@
             });
         }
 
-        function renderCriticalPathChart(tickets) {
-            const ctx = document.getElementById('criticalPathChart');
-
-            if (charts.criticalPath) {
-                charts.criticalPath.destroy();
-            }
+        function renderCriticalPathTable(tickets) {
+            const tableContainer = document.getElementById('criticalPathTable');
 
             // Filter tickets that have labels (critical path items)
             const criticalPathItems = tickets.filter(t => t.labels && t.labels.trim() !== '');
@@ -1929,79 +1913,38 @@
                 return new Date(a.dueDate) - new Date(b.dueDate);
             });
 
-            // Take top 10 critical path items for visualization
-            const items = criticalPathItems.slice(0, 10);
+            if (criticalPathItems.length === 0) {
+                tableContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #6b7280;">No critical path items found</p>';
+                return;
+            }
 
-            // Prepare data for horizontal bar chart
-            const labels = items.map(t => {
-                const summary = t.summary.length > 30 ? t.summary.substring(0, 30) + '...' : t.summary;
-                return summary;
-            });
+            // Generate table HTML
+            const tableHTML = `
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+                    <thead>
+                        <tr>
+                            <th style="background: #f9fafb; padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; position: sticky; top: 0;">Summary</th>
+                            <th style="background: #f9fafb; padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; width: 120px; position: sticky; top: 0;">Status</th>
+                            <th style="background: #f9fafb; padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; width: 120px; position: sticky; top: 0;">Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${criticalPathItems.map(item => {
+                            const statusClass = item.status.toLowerCase().replace(/ /g, '-');
+                            const dueDate = item.dueDate ? new Date(item.dueDate).toLocaleDateString() : 'Not set';
+                            return `
+                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                    <td style="padding: 0.75rem;">${item.summary}</td>
+                                    <td style="padding: 0.75rem;"><span class="status-badge status-${statusClass}">${item.status}</span></td>
+                                    <td style="padding: 0.75rem;">${dueDate}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
 
-            const statusColors = {
-                'Done': '#10b981',
-                'In Progress': '#3b82f6',
-                'In Review': '#f59e0b',
-                'To Do': '#6b7280',
-                'Blocked': '#ef4444'
-            };
-
-            const backgroundColors = items.map(t => statusColors[t.status] || '#6b7280');
-
-            // Calculate days until due date
-            const today = new Date();
-            const daysUntilDue = items.map(t => {
-                if (!t.dueDate) return 0;
-                const due = new Date(t.dueDate);
-                const diff = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
-                return diff;
-            });
-
-            charts.criticalPath = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Days Until Due',
-                        data: daysUntilDue,
-                        backgroundColor: backgroundColors,
-                        borderWidth: 1,
-                        borderColor: backgroundColors.map(c => c)
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Days Until Due Date'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(context) {
-                                    const index = context[0].dataIndex;
-                                    return items[index].summary;
-                                },
-                                afterTitle: function(context) {
-                                    const index = context[0].dataIndex;
-                                    const item = items[index];
-                                    return `Key: ${item.issueKey}\nStatus: ${item.status}\nDue: ${item.dueDate || 'Not set'}`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            tableContainer.innerHTML = tableHTML;
         }
 
         function renderIssueTable(tickets) {
@@ -2057,10 +2000,8 @@
                 renderMetrics(metrics, dateProgress);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
-                renderCriticalPathChart(allTickets);
                 renderCurrentSprintChart(sprintMetrics);
-                renderAssigneeBreakdownChart(allTickets);
-                renderPriorityDistributionChart(allTickets);
+                renderCriticalPathTable(allTickets);
                 renderIssueTable(allTickets);
 
                 document.getElementById('narrativeText').textContent = narrative;
