@@ -1002,7 +1002,7 @@
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Critical Path</div>
+                <div class="chart-title">Critical Path Stories</div>
                 <div id="criticalPathTable" style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
                     <!-- Critical path table will be inserted here -->
                 </div>
@@ -1290,16 +1290,19 @@
             // Calculate totals (use story points if available, otherwise ticket count)
             const totalPoints = tickets.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
             const completedPoints = tickets.filter(t => t.status === 'Done').reduce((sum, t) => sum + (t.storyPoints || 0), 0);
+            const inProgressPoints = tickets.filter(t => t.status === 'In Progress').reduce((sum, t) => sum + (t.storyPoints || 0), 0);
 
             const useTicketCount = totalPoints === 0;
             const committed = useTicketCount ? tickets.length : totalPoints;
             const completed = useTicketCount ? tickets.filter(t => t.status === 'Done').length : completedPoints;
+            const inProgress = useTicketCount ? tickets.filter(t => t.status === 'In Progress').length : inProgressPoints;
             const unit = useTicketCount ? 'Tickets' : 'Story Points';
 
             return {
                 sprintNumber,
                 committed,
                 completed,
+                inProgress,
                 unit
             };
         }
@@ -1713,7 +1716,7 @@
             }
 
             // Update chart title
-            const chartTitle = document.querySelector('#chartsSection .chart-card:nth-child(4) .chart-title');
+            const chartTitle = document.querySelector('#chartsSection .chart-card:nth-child(3) .chart-title');
             if (chartTitle) {
                 chartTitle.textContent = `Sprint ${sprintMetrics.sprintNumber} - ${sprintMetrics.unit}`;
             }
@@ -1727,6 +1730,11 @@
                             label: 'Committed',
                             data: [sprintMetrics.committed],
                             backgroundColor: '#6b7280'
+                        },
+                        {
+                            label: 'In Progress',
+                            data: [sprintMetrics.inProgress],
+                            backgroundColor: '#3b82f6'
                         },
                         {
                             label: 'Completed',
@@ -1752,7 +1760,33 @@
                             position: 'bottom'
                         }
                     }
-                }
+                },
+                plugins: [{
+                    id: 'dataLabels',
+                    afterDatasetsDraw: function(chart) {
+                        const ctx = chart.ctx;
+                        chart.data.datasets.forEach((dataset, i) => {
+                            const meta = chart.getDatasetMeta(i);
+                            if (!meta.hidden) {
+                                meta.data.forEach((element, index) => {
+                                    ctx.fillStyle = '#1f2937';
+                                    const fontSize = 14;
+                                    const fontStyle = 'bold';
+                                    const fontFamily = 'Arial';
+                                    ctx.font = fontStyle + ' ' + fontSize + 'px ' + fontFamily;
+
+                                    const dataString = dataset.data[index].toString();
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'middle';
+
+                                    const padding = 5;
+                                    const position = element.tooltipPosition();
+                                    ctx.fillText(dataString, position.x, position.y - fontSize / 2 - padding);
+                                });
+                            }
+                        });
+                    }
+                }]
             });
         }
 
