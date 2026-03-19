@@ -1392,16 +1392,25 @@
                 });
             }
 
-            // 4. Top Performer or Epic Progress
-            const epicBreakdown = getEpicBreakdown(tickets);
-            if (epicBreakdown.length > 0) {
-                const topEpic = epicBreakdown[0];
-                const epicProgress = topEpic.total > 0 ? Math.round((topEpic.done / topEpic.total) * 100) : 0;
+            // 4. Critical Path Stories (Focus Area)
+            const criticalPathItems = tickets.filter(t => t.labels && t.labels.trim() !== '');
+            if (criticalPathItems.length > 0) {
+                const totalCritical = criticalPathItems.length;
+                const doneCritical = criticalPathItems.filter(t => t.status === 'Done').length;
+                const criticalProgress = totalCritical > 0 ? Math.round((doneCritical / totalCritical) * 100) : 0;
+
+                let type = 'info';
+                if (criticalProgress >= 70) {
+                    type = 'success';
+                } else if (criticalProgress < 50) {
+                    type = 'warning';
+                }
+
                 insights.push({
-                    type: epicProgress >= 70 ? 'success' : 'info',
+                    type: type,
                     label: 'Focus Area',
-                    value: topEpic.epic,
-                    description: `${epicProgress}% complete (${topEpic.done}/${topEpic.total} tickets)`
+                    value: 'Critical Path Stories',
+                    description: `${criticalProgress}% complete (${doneCritical}/${totalCritical} stories)`
                 });
             }
 
