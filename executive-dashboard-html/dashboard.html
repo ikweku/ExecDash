@@ -827,6 +827,81 @@
         .clear-filter-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+
+        /* ===== DEMO DATA WARNING BANNER ===== */
+        .demo-warning {
+            background: linear-gradient(135deg, #FF6B00 0%, #FFA500 100%);
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            box-shadow: 0 4px 8px rgba(255, 107, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        .demo-warning.active {
+            display: flex;
+        }
+
+        .demo-warning-icon {
+            font-size: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .demo-warning-text {
+            font-size: 1rem;
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .demo-warning-dismiss {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .demo-warning-dismiss:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        body.presentation-mode .demo-warning {
+            display: none !important;
+        }
+
+        @media print {
+            .demo-warning {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -843,6 +918,13 @@
                 <button class="btn btn-primary" id="refreshBtn">Refresh Data</button>
             </div>
         </div>
+    </div>
+
+    <!-- Demo Data Warning Banner -->
+    <div class="demo-warning" id="demoWarning">
+        <span class="demo-warning-icon">⚠️</span>
+        <span class="demo-warning-text">DEMO DATA - You are viewing sample data. Upload your CSV to see real metrics.</span>
+        <button class="demo-warning-dismiss" id="dismissDemoWarning">Dismiss</button>
     </div>
 
     <div class="container">
@@ -958,6 +1040,44 @@
         let filteredTickets = [];
         let charts = {};
         let activeFilter = null; // Track active filter: 'done', 'in-progress', 'in-review', 'todo', 'blocked', or null
+        let isUsingDemoData = false; // Track if we're viewing demo/sample data
+
+        // ===== DEMO DATA WARNING =====
+        function showDemoWarning() {
+            const banner = document.getElementById('demoWarning');
+            if (banner) {
+                banner.classList.add('active');
+            }
+        }
+
+        function hideDemoWarning() {
+            const banner = document.getElementById('demoWarning');
+            if (banner) {
+                banner.classList.remove('active');
+            }
+        }
+
+        function isDemoData(tickets, fileName) {
+            // Check if this is demo data by:
+            // 1. Filename is latest.csv
+            // 2. Contains demo ticket keys (GER-xxx)
+            // 3. Contains demo assignee names
+            if (fileName === 'latest.csv') return true;
+
+            const demoKeys = ['GER-', 'DEMO-', 'SAMPLE-'];
+            const demoAssignees = ['Sarah Chen', 'Marcus Rodriguez', 'Emily Watson',
+                                  'James Kim', 'Priya Patel', 'Alex Thompson', 'Lisa Anderson'];
+
+            const hasDemoKeys = tickets.some(t =>
+                demoKeys.some(prefix => t.issueKey.startsWith(prefix))
+            );
+
+            const hasDemoAssignees = tickets.some(t =>
+                demoAssignees.includes(t.assignee)
+            );
+
+            return hasDemoKeys || hasDemoAssignees;
+        }
 
         // ===== STATUS NORMALIZATION =====
         const statusMap = {
@@ -1625,6 +1745,15 @@
                 allTickets = await parseCSV(csvText, fileName);
                 filteredTickets = allTickets;
 
+                // Check if this is demo data
+                isUsingDemoData = isDemoData(allTickets, fileName);
+
+                if (isUsingDemoData) {
+                    showDemoWarning();
+                } else {
+                    hideDemoWarning();
+                }
+
                 const metrics = calculateMetrics(allTickets);
                 const epicBreakdown = getEpicBreakdown(allTickets);
                 const sprintProgress = getSprintProgress(allTickets);
@@ -1725,6 +1854,11 @@
             const metrics = calculateMetrics(allTickets);
             renderMetrics(metrics);
             renderIssueTable(filteredTickets);
+        });
+
+        // Dismiss demo warning banner
+        document.getElementById('dismissDemoWarning').addEventListener('click', () => {
+            hideDemoWarning();
         });
 
         // Keyboard shortcuts
