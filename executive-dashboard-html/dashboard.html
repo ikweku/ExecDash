@@ -1148,7 +1148,7 @@
                             const sprint = row['Sprint'] || '';
                             const created = row['Created'] || row['Create Date'] || '';
                             const updated = row['Updated'] || row['Last Updated'] || '';
-                            const dueDate = row['Due Date'] || row['Due'] || '';
+                            const dueDate = row['Custom field (Target end)'] || row['Custom Field (Target end)'] || row['Due Date'] || row['Due'] || '';
                             const storyPoints = parseInt(row['Story Points'] || row['Points'] || '0', 10);
 
                             return {
