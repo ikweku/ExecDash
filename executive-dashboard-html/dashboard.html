@@ -2194,7 +2194,9 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                             const status = row['Status'] || row['State'] || '';
                             const assignee = row['Assignee'] || row['Assigned To'] || '';
                             const priority = row['Priority'] || '';
-                            const epic = row['Labels_1'] || row['Epic'] || row['Epic Name'] || row['Epic Link'] || '';
+                            const parentKey = row['Parent key'] || row['Parent Key'] || '';
+                            const parentSummary = row['Parent summary'] || row['Parent Summary'] || '';
+                            const epic = parentSummary || row['Labels_1'] || row['Epic'] || row['Epic Name'] || row['Epic Link'] || '';
                             const labels = row['Labels'] || '';
                             const sprint = row['Sprint'] || '';
                             const created = row['Created'] || row['Create Date'] || '';
@@ -2209,6 +2211,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                                 rawStatus: status,
                                 assignee,
                                 priority,
+                                parentKey,
+                                parentSummary,
                                 epic,
                                 labels,
                                 sprint,
@@ -2262,11 +2266,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             const epicMap = new Map();
 
             tickets.forEach(ticket => {
-                const epic = ticket.epic || 'Others';
+                // Use parentKey for grouping (unique identifier) or parentSummary, or fall back to epic field
+                const epicKey = ticket.parentKey || ticket.parentSummary || ticket.epic || 'Others';
+                const epicName = ticket.parentSummary || ticket.epic || 'Others';
 
-                if (!epicMap.has(epic)) {
-                    epicMap.set(epic, {
-                        epic,
+                if (!epicMap.has(epicKey)) {
+                    epicMap.set(epicKey, {
+                        epic: epicName,
                         done: 0,
                         inProgress: 0,
                         inReview: 0,
@@ -2276,7 +2282,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                     });
                 }
 
-                const epicData = epicMap.get(epic);
+                const epicData = epicMap.get(epicKey);
                 epicData.total++;
 
                 switch (ticket.status) {
