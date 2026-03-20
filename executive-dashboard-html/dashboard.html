@@ -430,6 +430,243 @@
             color: #374151;
         }
 
+        /* Milestone Accordion */
+        .milestone-accordion {
+            margin-bottom: 1rem;
+        }
+
+        .milestone-accordion-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .milestone-accordion-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .milestone-accordion-header {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #6b21a8 0%, #7c3aed 100%);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .milestone-accordion-header:hover {
+            background: linear-gradient(135deg, #581c87 0%, #6b21a8 100%);
+        }
+
+        .milestone-accordion-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .milestone-accordion-id {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .milestone-accordion-theme {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .milestone-accordion-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .milestone-accordion-progress {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .milestone-accordion-arrow {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .milestone-accordion-item.active .milestone-accordion-arrow {
+            transform: rotate(180deg);
+        }
+
+        .milestone-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .milestone-accordion-item.active .milestone-accordion-content {
+            max-height: 2000px;
+        }
+
+        .milestone-accordion-body {
+            padding: 1.5rem;
+        }
+
+        .milestone-form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .milestone-form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .milestone-form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .milestone-form-input:focus {
+            outline: none;
+            border-color: #6b21a8;
+            box-shadow: 0 0 0 3px rgba(107, 33, 168, 0.1);
+        }
+
+        .milestone-form-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            resize: vertical;
+        }
+
+        .milestone-form-textarea:focus {
+            outline: none;
+            border-color: #6b21a8;
+            box-shadow: 0 0 0 3px rgba(107, 33, 168, 0.1);
+        }
+
+        .deliverables-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e5e7eb;
+        }
+
+        .deliverable-item {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .deliverable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .deliverable-name {
+            font-weight: 600;
+            color: #1f2937;
+            flex: 1;
+        }
+
+        .deliverable-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .deliverable-status-select {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            background: white;
+        }
+
+        .deliverable-progress {
+            width: 80px;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .deliverable-remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .deliverable-remove-btn:hover {
+            background: #dc2626;
+        }
+
+        .add-deliverable-btn {
+            background: #6b21a8;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 0.75rem;
+        }
+
+        .add-deliverable-btn:hover {
+            background: #581c87;
+        }
+
+        .milestone-save-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+
+        .milestone-save-btn:hover {
+            background: #059669;
+        }
+
+        .milestone-dates-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .milestone-dates-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Issue tracker */
         .issue-tracker {
             background: white;
@@ -607,6 +844,15 @@
             display: none;
         }
 
+        body.presentation-mode .edit-controls {
+            display: none;
+        }
+
+        body.presentation-mode .milestone-row {
+            cursor: default !important;
+            pointer-events: none;
+        }
+
         .hidden {
             display: none;
         }
@@ -758,54 +1004,197 @@
             gap: 0.5rem;
         }
 
-        .insights-grid {
+        .executive-summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
 
-        .insight-item {
-            padding: 1rem;
+        @media (max-width: 1024px) {
+            .executive-summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-column {
             background: #f9fafb;
-            border-radius: 0.375rem;
-            border-left: 3px solid;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border-top: 4px solid;
         }
 
-        .insight-item.risk {
-            border-left-color: #ef4444;
+        .progress-column {
+            border-top-color: #6b21a8;
+            background: linear-gradient(to bottom, #faf5ff 0%, #f9fafb 100%);
         }
 
-        .insight-item.success {
-            border-left-color: #10b981;
+        .wins-column {
+            border-top-color: #10b981;
+            background: linear-gradient(to bottom, #f0fdf4 0%, #f9fafb 100%);
         }
 
-        .insight-item.warning {
-            border-left-color: #f59e0b;
+        .blockers-column {
+            border-top-color: #f59e0b;
+            background: linear-gradient(to bottom, #fffbeb 0%, #f9fafb 100%);
         }
 
-        .insight-item.info {
-            border-left-color: #3b82f6;
-        }
-
-        .insight-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: #6b7280;
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.5px;
-        }
-
-        .insight-value {
-            font-size: 1.25rem;
+        .summary-column h3 {
+            font-size: 1.125rem;
             font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #1f2937;
+        }
+
+        .summary-item {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.375rem;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .summary-item-title {
+            font-size: 0.875rem;
+            font-weight: 600;
             color: #1f2937;
             margin-bottom: 0.25rem;
         }
 
-        .insight-description {
+        .summary-item-text {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .milestone-progress-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.375rem;
+        }
+
+        .milestone-progress-item .milestone-id {
+            font-weight: 700;
+            font-size: 0.875rem;
+            min-width: 2rem;
+        }
+
+        .milestone-progress-mini {
+            flex: 1;
+            height: 1.5rem;
+            background: #e5e7eb;
+            border-radius: 0.25rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .milestone-progress-mini-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .milestone-progress-mini-fill.high {
+            background: #10b981;
+        }
+
+        .milestone-progress-mini-fill.medium {
+            background: #3b82f6;
+        }
+
+        .milestone-progress-mini-fill.low {
+            background: #f59e0b;
+        }
+
+        .win-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #10b981;
+        }
+
+        .win-icon {
+            font-size: 1rem;
+            margin-top: 0.125rem;
+        }
+
+        .win-content {
+            flex: 1;
+        }
+
+        .win-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.125rem;
+        }
+
+        .win-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .blocker-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #ef4444;
+        }
+
+        .blocker-icon {
+            font-size: 1rem;
+            margin-top: 0.125rem;
+        }
+
+        .blocker-content {
+            flex: 1;
+        }
+
+        .blocker-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.125rem;
+        }
+
+        .blocker-subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .summary-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
             font-size: 0.875rem;
             color: #6b7280;
+            text-align: center;
+        }
+
+        .no-items-message {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #9ca3af;
+            font-size: 0.875rem;
         }
 
         /* ===== SECTION NAVIGATION ===== */
@@ -1278,7 +1667,6 @@
             <div class="header-right">
                 <button class="btn btn-secondary" id="darkModeBtn">Dark Mode</button>
                 <button class="btn btn-secondary" id="presentationModeBtn">Presentation Mode</button>
-                <button class="btn btn-secondary" id="updateMilestoneBtn">Update Milestone Data</button>
                 <button class="btn btn-primary" id="refreshBtn">Refresh Data</button>
             </div>
         </div>
@@ -1383,8 +1771,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         <!-- Executive Summary -->
         <div class="executive-summary" id="summarySection">
             <h2>Executive Summary</h2>
-            <div class="insights-grid" id="insightsGrid">
-                <!-- Insights will be populated by JavaScript -->
+            <div class="executive-summary-grid" id="executiveSummaryGrid">
+                <!-- Progress, Wins, and Blockers will be populated by JavaScript -->
             </div>
         </div>
 
@@ -1438,11 +1826,11 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 <h2 class="section-title">Milestone Tracker</h2>
             </div>
 
-            <!-- Milestone Overview Table -->
+            <!-- Milestone Accordion Forms -->
             <div class="milestone-card">
                 <div class="chart-title">Milestone Overview</div>
-                <div id="milestoneTable" style="overflow-x: auto;">
-                    <!-- Milestone table will be inserted here -->
+                <div id="milestoneAccordion">
+                    <!-- Milestone accordion will be rendered here by JavaScript -->
                 </div>
             </div>
 
@@ -1453,12 +1841,6 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                     <!-- Risks table will be inserted here -->
                 </div>
             </div>
-        </div>
-
-        <!-- Executive Narrative -->
-        <div class="narrative-section">
-            <div class="narrative-title">Executive Summary</div>
-            <div class="narrative-text" id="narrativeText">Loading...</div>
         </div>
 
         <!-- Issue Tracker -->
@@ -1494,52 +1876,51 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         let activeFilter = null; // Track active filter: 'done', 'in-progress', 'in-review', 'todo', 'blocked', or null
         let isUsingDemoData = false; // Track if we're viewing demo/sample data
 
-        // ===== MILESTONE DATA =====
-        // TO UPDATE: Edit this data structure with your Confluence milestone information
+        // ===== MILESTONE DATA WITH DELIVERABLES =====
+        // Progress is auto-calculated from deliverable statuses
         const milestonesData = [
             {
                 id: 'M1',
-                period: {
-                    original: 'Sep 26 - Oct 31',
-                    target: 'Oct 31, 2025',
-                    changed: false
-                },
+                dueDate: 'October 31, 2025',
+                originalDate: null,
                 theme: 'Enhance CORE DOMO + Elysium Architecture',
-                progress: 100,
-                scheduleStatus: 'Completed'
+                deliverables: [
+                    { id: 'm1-1', name: '1.1 Enabling Disaster Recovery (DR) for DOMO', status: 'Complete', progress: 100 },
+                    { id: 'm1-2', name: '1.2 Implementing DOMO Prod Parallel for testing', status: 'Complete', progress: 100 },
+                    { id: 'm1-3', name: '1.3 Design Elysium', status: 'Complete', progress: 100 }
+                ]
             },
             {
                 id: 'M2',
-                period: {
-                    original: 'Nov 1 - Nov 30',
-                    target: '01/30/26',
-                    changed: true
-                },
-                theme: 'Elysium Design delayed+ Predictive Monitoring UI Design sign off received',
-                progress: 75,
-                scheduleStatus: 'Late'
+                dueDate: '01/30/26',
+                originalDate: 'November 30, 2025',
+                theme: 'Operational Data Store (Elysium) Design + Predictive Monitoring UI Design',
+                deliverables: [
+                    { id: 'm2-1', name: '2.1 Elysium Design', status: 'In Progress', progress: 95 },
+                    { id: 'm2-2', name: '2.2 Predict Critical Batch Design Completion/Approval', status: 'Complete', progress: 100 }
+                ]
             },
             {
                 id: 'M3',
-                period: {
-                    original: 'Dec 1 - Dec 31',
-                    target: '02/28/26',
-                    changed: true
-                },
-                theme: 'Elysium Development Complete + Predictive Monitoring Production Deployed',
-                progress: 75,
-                scheduleStatus: 'Predictive - Completed, signed off 3/6\nElysium in progress'
+                dueDate: '02/28/26',
+                originalDate: 'December 31, 2025',
+                theme: 'Elysium Development Complete',
+                deliverables: [
+                    { id: 'm3-1', name: '3.1 Implement Elysium DEV', status: 'In Progress', progress: 55 },
+                    { id: 'm3-2', name: '3.2 Predict Critical Batch Completion', status: 'Complete', progress: 100 }
+                ]
             },
             {
                 id: 'M4',
-                period: {
-                    original: 'Jan 1 - Jan 16',
-                    target: '03/31/2026',
-                    changed: true
-                },
-                theme: 'Elysium',
-                progress: 20,
-                scheduleStatus: 'In Progress - 20%'
+                dueDate: '03/31/2026',
+                originalDate: 'January 16, 2026',
+                theme: 'Elysium + Predictive Monitoring Production Deployed',
+                deliverables: [
+                    { id: 'm4-1', name: '4.1 Implement Elysium PROD', status: 'Not Started', progress: 0 },
+                    { id: 'm4-2', name: '4.2 Databricks AI BI Pilot', status: 'In Progress', progress: 25 },
+                    { id: 'm4-3', name: '4.3 Domo Dashboard Usage Statistics POC', status: 'Not Started', progress: 0 },
+                    { id: 'm4-4', name: '4.4 Astronomer Impact Analysis', status: 'In Progress', progress: 25 }
+                ]
             }
         ];
 
@@ -1547,6 +1928,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         // TO UPDATE: Edit this data structure with your Confluence risks information
         const risksData = [
             {
+                id: 'risk-1',
                 status: 'Open',
                 type: 'Risk',
                 details: 'DOMO Vulnerabilities',
@@ -1555,6 +1937,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 statusImpact: 'DOMO Vulnerabilities identified 3/10, fixes deployed in EKS cluster. Access to vulnerability report requested to validate the fix'
             },
             {
+                id: 'risk-2',
                 status: 'Open',
                 type: 'Risk',
                 details: 'TAG creation/mapping - Will be a blocker to Databricks-Elysium connection - must be',
@@ -1722,155 +2105,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             }
         }
 
-        // ===== MODAL FUNCTIONS =====
-        function openMilestoneModal() {
-            document.getElementById('modalOverlay').classList.add('active');
-            document.getElementById('milestoneModal').classList.add('active');
-        }
-
-        function closeMilestoneModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            document.getElementById('milestoneModal').classList.remove('active');
-            // Clear preview areas
-            document.getElementById('milestonePreview').innerHTML = '';
-            document.getElementById('risksPreview').innerHTML = '';
-        }
-
-        function switchModalTab(tabName) {
-            // Remove active class from all tabs and content
-            document.querySelectorAll('.modal-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.modal-tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-
-            // Add active class to selected tab and content
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-        }
-
-        function previewMilestoneData() {
-            const textarea = document.getElementById('milestoneTextarea');
-            const previewDiv = document.getElementById('milestonePreview');
-
-            previewDiv.innerHTML = '';
-
-            if (!textarea.value.trim()) {
-                previewDiv.innerHTML = '<div class="modal-error">Please paste milestone data first.</div>';
-                return;
-            }
-
-            try {
-                const parsedData = parseMilestoneData(textarea.value);
-
-                let html = '<div class="modal-success">Successfully parsed ' + parsedData.length + ' milestone(s)!</div>';
-                html += '<div class="modal-preview"><h4>Preview:</h4><ul>';
-
-                parsedData.forEach(m => {
-                    html += `<li><strong>${m.id}</strong>: ${m.theme} - ${m.progress}% (${m.scheduleStatus})</li>`;
-                });
-
-                html += '</ul></div>';
-                previewDiv.innerHTML = html;
-            } catch (error) {
-                previewDiv.innerHTML = '<div class="modal-error"><strong>Error:</strong> ' + error.message + '</div>';
-            }
-        }
-
-        function previewRisksData() {
-            const textarea = document.getElementById('risksTextarea');
-            const previewDiv = document.getElementById('risksPreview');
-
-            previewDiv.innerHTML = '';
-
-            if (!textarea.value.trim()) {
-                previewDiv.innerHTML = '<div class="modal-error">Please paste risks data first.</div>';
-                return;
-            }
-
-            try {
-                const parsedData = parseRisksData(textarea.value);
-
-                let html = '<div class="modal-success">Successfully parsed ' + parsedData.length + ' risk(s)!</div>';
-                html += '<div class="modal-preview"><h4>Preview:</h4><ul>';
-
-                parsedData.forEach(r => {
-                    html += `<li><strong>${r.type}</strong>: ${r.details} (Priority ${r.priority})</li>`;
-                });
-
-                html += '</ul></div>';
-                previewDiv.innerHTML = html;
-            } catch (error) {
-                previewDiv.innerHTML = '<div class="modal-error"><strong>Error:</strong> ' + error.message + '</div>';
-            }
-        }
-
-        function applyMilestoneChanges() {
-            const milestoneText = document.getElementById('milestoneTextarea').value;
-            const risksText = document.getElementById('risksTextarea').value;
-
-            let milestonesUpdated = false;
-            let risksUpdated = false;
-
-            // Update milestones if data is present
-            if (milestoneText.trim()) {
-                try {
-                    const parsedMilestones = parseMilestoneData(milestoneText);
-                    milestonesData.length = 0;
-                    milestonesData.push(...parsedMilestones);
-                    saveMilestoneDataToStorage(parsedMilestones);
-                    milestonesUpdated = true;
-                } catch (error) {
-                    alert('Error applying milestone data: ' + error.message);
-                    return;
-                }
-            }
-
-            // Update risks if data is present
-            if (risksText.trim()) {
-                try {
-                    const parsedRisks = parseRisksData(risksText);
-                    risksData.length = 0;
-                    risksData.push(...parsedRisks);
-                    saveRisksDataToStorage(parsedRisks);
-                    risksUpdated = true;
-                } catch (error) {
-                    alert('Error applying risks data: ' + error.message);
-                    return;
-                }
-            }
-
-            // Re-render tables
-            if (milestonesUpdated) {
-                renderMilestoneTable();
-            }
-            if (risksUpdated) {
-                renderRisksTable();
-            }
-
-            // Close modal and show success
-            closeMilestoneModal();
-
-            if (milestonesUpdated || risksUpdated) {
-                alert('Data updated successfully! Changes saved to browser storage.');
-            } else {
-                alert('No data was provided to update.');
-            }
-        }
-
-        function resetToSampleData() {
-            if (!confirm('This will reset milestone and risks data to sample data. Continue?')) {
-                return;
-            }
-
-            // Clear localStorage
-            localStorage.removeItem('milestoneData');
-            localStorage.removeItem('risksData');
-
-            // Reload page to reset to defaults
-            location.reload();
-        }
+        // ===== DEPRECATED MODAL FUNCTIONS REMOVED =====
+        // Modal interface replaced with inline accordion forms
 
         // ===== DEMO DATA WARNING =====
         function showDemoWarning() {
@@ -2131,106 +2367,201 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             };
         }
 
-        function generateNarrative(metrics) {
-            const { percentComplete, percentInProgress, percentRemaining, blockedTickets } = metrics;
+        // ===== NEW EXECUTIVE SUMMARY FUNCTIONS =====
 
-            let narrative = `${percentComplete}% of scoped work is complete`;
+        // Helper: Get recent completions from tickets
+        function getRecentCompletions(tickets, days = 7) {
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - days);
 
-            if (percentInProgress > 0) {
-                narrative += `, ${percentInProgress}% is in progress`;
-            }
+            return tickets.filter(ticket => {
+                const completedStatuses = ['Done', 'Completed', 'Resolved', 'Closed'];
+                if (!completedStatuses.includes(ticket.status)) return false;
 
-            if (percentRemaining > 0) {
-                narrative += `, and ${percentRemaining}% remains`;
-            }
-
-            narrative += '.';
-
-            if (blockedTickets > 0) {
-                narrative += ` ${blockedTickets} ${blockedTickets === 1 ? 'ticket is' : 'tickets are'} currently blocked and require${blockedTickets === 1 ? 's' : ''} attention.`;
-            }
-
-            return narrative;
+                // Check if updated in last N days
+                if (ticket.updated) {
+                    try {
+                        const updatedDate = new Date(ticket.updated);
+                        return updatedDate >= cutoffDate;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+                return false;
+            }).sort((a, b) => {
+                const dateA = new Date(a.updated || 0);
+                const dateB = new Date(b.updated || 0);
+                return dateB - dateA; // Most recent first
+            });
         }
 
-        function generateExecutiveSummary(tickets, metrics) {
-            const insights = [];
+        // Generate Progress Summary Column
+        function generateProgressSummary(milestonesData) {
+            if (!milestonesData || milestonesData.length === 0) {
+                return '<div class="no-items-message">No milestone data available</div>';
+            }
 
-            // 1. Velocity/Progress Insight
-            if (metrics.percentComplete >= 75) {
-                insights.push({
-                    type: 'success',
-                    label: 'On Track',
-                    value: `${metrics.percentComplete}% Complete`,
-                    description: 'Sprint is progressing well ahead of schedule'
-                });
-            } else if (metrics.percentComplete >= 50) {
-                insights.push({
-                    type: 'info',
-                    label: 'Steady Progress',
-                    value: `${metrics.percentComplete}% Complete`,
-                    description: 'Sprint is on track to meet goals'
-                });
-            } else {
-                insights.push({
-                    type: 'warning',
-                    label: 'Needs Attention',
-                    value: `${metrics.percentComplete}% Complete`,
-                    description: 'May need additional resources or time'
+            let html = '';
+
+            // Show each milestone progress
+            milestonesData.forEach(milestone => {
+                const progress = calculateMilestoneProgress(milestone.deliverables);
+                const progressClass = progress >= 70 ? 'high' : progress >= 50 ? 'medium' : 'low';
+
+                html += `
+                    <div class="milestone-progress-item">
+                        <span class="milestone-id">${milestone.id}</span>
+                        <div class="milestone-progress-mini">
+                            <div class="milestone-progress-mini-fill ${progressClass}" style="width: ${progress}%">
+                                ${progress}%
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Calculate overall program health
+            const totalProgress = milestonesData.reduce((sum, m) => sum + calculateMilestoneProgress(m.deliverables), 0);
+            const overallProgress = Math.round(totalProgress / milestonesData.length);
+            const healthStatus = overallProgress >= 70 ? 'On Track' : overallProgress >= 50 ? 'In Progress' : 'Needs Attention';
+
+            html += `
+                <div class="summary-footer">
+                    <strong>Overall Program: ${overallProgress}%</strong><br>
+                    ${healthStatus}
+                </div>
+            `;
+
+            return html;
+        }
+
+        // Generate Wins Summary Column
+        function generateWinsSummary(milestonesData, tickets) {
+            let html = '';
+            let winsCount = 0;
+
+            // 1. Completed Milestones
+            const completedMilestones = milestonesData.filter(m => calculateMilestoneProgress(m.deliverables) === 100);
+            if (completedMilestones.length > 0) {
+                completedMilestones.forEach(milestone => {
+                    html += `
+                        <div class="win-item">
+                            <div class="win-icon">✓</div>
+                            <div class="win-content">
+                                <div class="win-title">${milestone.id} Complete</div>
+                                <div class="win-subtitle">${milestone.theme}</div>
+                            </div>
+                        </div>
+                    `;
+                    winsCount++;
                 });
             }
 
-            // 2. Blocked Items Risk
-            if (metrics.blockedTickets > 0) {
-                insights.push({
-                    type: 'risk',
-                    label: 'Blocked Items',
-                    value: `${metrics.blockedTickets} Ticket${metrics.blockedTickets > 1 ? 's' : ''}`,
-                    description: 'Require immediate attention to unblock'
-                });
-            } else {
-                insights.push({
-                    type: 'success',
-                    label: 'No Blockers',
-                    value: '0 Blocked',
-                    description: 'Team has clear path forward'
-                });
-            }
-
-            // 3. Active Work Insight
-            const activeWork = metrics.inProgressTickets + metrics.inReviewTickets;
-            if (activeWork > 0) {
-                insights.push({
-                    type: 'info',
-                    label: 'Active Work',
-                    value: `${activeWork} Ticket${activeWork > 1 ? 's' : ''}`,
-                    description: `${metrics.inProgressTickets} in progress, ${metrics.inReviewTickets} in review`
+            // 2. Recent Completions (last 7 days)
+            const recentCompletions = getRecentCompletions(tickets, 7);
+            if (recentCompletions.length > 0) {
+                const topCompletions = recentCompletions.slice(0, 3); // Show top 3
+                topCompletions.forEach(ticket => {
+                    html += `
+                        <div class="win-item">
+                            <div class="win-icon">🎯</div>
+                            <div class="win-content">
+                                <div class="win-title">${ticket.key}: ${ticket.summary}</div>
+                                <div class="win-subtitle">${ticket.assignee || 'Unassigned'}</div>
+                            </div>
+                        </div>
+                    `;
+                    winsCount++;
                 });
             }
 
-            // 4. Critical Path Stories (Focus Area)
-            const criticalPathItems = tickets.filter(t => t.labels && t.labels.trim() !== '');
-            if (criticalPathItems.length > 0) {
-                const totalCritical = criticalPathItems.length;
-                const doneCritical = criticalPathItems.filter(t => t.status === 'Done').length;
-                const criticalProgress = totalCritical > 0 ? Math.round((doneCritical / totalCritical) * 100) : 0;
+            // 3. Team Accomplishments - Top Contributor
+            if (recentCompletions.length > 0) {
+                const contributorMap = {};
+                recentCompletions.forEach(ticket => {
+                    const assignee = ticket.assignee || 'Unassigned';
+                    contributorMap[assignee] = (contributorMap[assignee] || 0) + 1;
+                });
 
-                let type = 'info';
-                if (criticalProgress >= 70) {
-                    type = 'success';
-                } else if (criticalProgress < 50) {
-                    type = 'warning';
+                const topContributor = Object.entries(contributorMap)
+                    .sort((a, b) => b[1] - a[1])[0];
+
+                if (topContributor && topContributor[0] !== 'Unassigned') {
+                    html += `
+                        <div class="win-item">
+                            <div class="win-icon">🌟</div>
+                            <div class="win-content">
+                                <div class="win-title">Top Contributor: ${topContributor[0]}</div>
+                                <div class="win-subtitle">${topContributor[1]} ${topContributor[1] === 1 ? 'completion' : 'completions'} this week</div>
+                            </div>
+                        </div>
+                    `;
+                    winsCount++;
                 }
+            }
 
-                insights.push({
-                    type: type,
-                    label: 'Focus Area',
-                    value: 'Critical Path Stories',
-                    description: `${criticalProgress}% complete (${doneCritical}/${totalCritical} stories)`
+            if (winsCount === 0) {
+                return '<div class="no-items-message">No recent wins yet.<br>Keep pushing forward!</div>';
+            }
+
+            return html;
+        }
+
+        // Generate Blockers Summary Column
+        function generateBlockersSummary(risksData, milestonesData) {
+            let html = '';
+            let blockerCount = 0;
+
+            // 1. Critical Risks (Open + Priority 1)
+            const criticalRisks = risksData.filter(r => r.status === 'Open' && r.priority === 1);
+            if (criticalRisks.length > 0) {
+                const topRisks = criticalRisks.slice(0, 3); // Show top 3
+                topRisks.forEach(risk => {
+                    html += `
+                        <div class="blocker-item">
+                            <div class="blocker-icon">⚠️</div>
+                            <div class="blocker-content">
+                                <div class="blocker-title">${risk.details}</div>
+                                <div class="blocker-subtitle">Owner: ${risk.owner} | ${risk.type}</div>
+                            </div>
+                        </div>
+                    `;
+                    blockerCount++;
                 });
             }
 
-            return insights;
+            // 2. At-Risk Milestones (schedule slipped)
+            const atRiskMilestones = milestonesData.filter(m => m.originalDate && m.originalDate !== m.dueDate);
+            if (atRiskMilestones.length > 0) {
+                const topAtRisk = atRiskMilestones.slice(0, 2); // Show top 2
+                topAtRisk.forEach(milestone => {
+                    html += `
+                        <div class="blocker-item">
+                            <div class="blocker-icon">📅</div>
+                            <div class="blocker-content">
+                                <div class="blocker-title">${milestone.id}: Schedule Delayed</div>
+                                <div class="blocker-subtitle">New target: ${milestone.dueDate}</div>
+                            </div>
+                        </div>
+                    `;
+                    blockerCount++;
+                });
+            }
+
+            // Summary footer
+            const totalOpenRisks = risksData.filter(r => r.status === 'Open').length;
+            html += `
+                <div class="summary-footer">
+                    ${totalOpenRisks} Open Risk${totalOpenRisks !== 1 ? 's' : ''}<br>
+                    ${atRiskMilestones.length} Milestone${atRiskMilestones.length !== 1 ? 's' : ''} At Risk
+                </div>
+            `;
+
+            if (blockerCount === 0 && totalOpenRisks === 0) {
+                return '<div class="no-items-message">✓ No critical risks<br>All clear!</div>';
+            }
+
+            return html;
         }
 
         // ===== DATE-BASED PROGRESS CALCULATION =====
@@ -2373,17 +2704,35 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             }
         }
 
-        function renderExecutiveSummary(tickets, metrics) {
-            const insights = generateExecutiveSummary(tickets, metrics);
-            const insightsGrid = document.getElementById('insightsGrid');
+        // Main Render Function for New Executive Summary
+        function renderExecutiveSummary(milestonesData, tickets, risksData) {
+            const gridContainer = document.getElementById('executiveSummaryGrid');
 
-            insightsGrid.innerHTML = insights.map(insight => `
-                <div class="insight-item ${insight.type}">
-                    <div class="insight-label">${insight.label}</div>
-                    <div class="insight-value">${insight.value}</div>
-                    <div class="insight-description">${insight.description}</div>
+            if (!gridContainer) {
+                console.error('Executive summary grid container not found');
+                return;
+            }
+
+            // Generate each column
+            const progressHTML = generateProgressSummary(milestonesData);
+            const winsHTML = generateWinsSummary(milestonesData, tickets);
+            const blockersHTML = generateBlockersSummary(risksData, milestonesData);
+
+            // Build 3-column layout
+            gridContainer.innerHTML = `
+                <div class="summary-column progress-column">
+                    <h3>📊 Progress Overview</h3>
+                    ${progressHTML}
                 </div>
-            `).join('');
+                <div class="summary-column wins-column">
+                    <h3>🎉 Recent Wins</h3>
+                    ${winsHTML}
+                </div>
+                <div class="summary-column blockers-column">
+                    <h3>🚨 Risks & Blockers</h3>
+                    ${blockersHTML}
+                </div>
+            `;
         }
 
         function renderStatusDonutChart(metrics) {
@@ -2814,15 +3163,23 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             tableContainer.innerHTML = tableHTML;
         }
 
-        function renderMilestoneTable() {
-            const tableContainer = document.getElementById('milestoneTable');
+        // ===== MILESTONE ACCORDION RENDER FUNCTION =====
+        function calculateMilestoneProgress(deliverables) {
+            if (!deliverables || deliverables.length === 0) return 0;
+            const totalProgress = deliverables.reduce((sum, d) => sum + d.progress, 0);
+            return Math.round(totalProgress / deliverables.length);
+        }
+
+        function renderMilestoneAccordion() {
+            const accordionContainer = document.getElementById('milestoneAccordion');
 
             if (milestonesData.length === 0) {
-                tableContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #6b7280;">No milestone data available</p>';
+                accordionContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #6b7280;">No milestone data available</p>';
                 return;
             }
 
-            const tableHTML = `
+            // Generate table with expandable rows
+            let tableHTML = `
                 <table class="milestone-table">
                     <thead>
                         <tr>
@@ -2834,54 +3191,322 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                         </tr>
                     </thead>
                     <tbody>
-                        ${milestonesData.map(milestone => {
-                            const progressClass = milestone.progress >= 70 ? 'high' : milestone.progress >= 50 ? 'medium' : 'low';
+            `;
 
-                            let scheduleClass = 'schedule-on-track';
-                            if (milestone.scheduleStatus.toLowerCase().includes('late')) {
-                                scheduleClass = 'schedule-late';
-                            } else if (milestone.scheduleStatus.toLowerCase().includes('completed')) {
-                                scheduleClass = 'schedule-completed';
-                            }
+            milestonesData.forEach((milestone, index) => {
+                const progress = calculateMilestoneProgress(milestone.deliverables);
+                const progressClass = progress >= 70 ? 'high' : progress >= 50 ? 'medium' : 'low';
 
-                            return `
-                                <tr>
-                                    <td><span class="milestone-id">${milestone.id}</span></td>
-                                    <td>
-                                        ${milestone.period.changed ? `<span class="period-strikethrough">${milestone.period.original}</span>` : ''}
-                                        <span class="period-text">${milestone.period.target}</span>
-                                    </td>
-                                    <td>${milestone.theme}</td>
-                                    <td>
-                                        <div>${milestone.progress}%</div>
-                                        <div class="progress-bar-container-milestone">
-                                            <div class="progress-bar-fill-milestone ${progressClass}" style="width: ${milestone.progress}%">
-                                                ${milestone.progress}%
-                                            </div>
+                // Determine schedule status and class
+                let scheduleStatus = '';
+                let scheduleClass = 'schedule-on-track';
+
+                if (progress === 100) {
+                    scheduleStatus = 'Completed';
+                    scheduleClass = 'schedule-completed';
+                } else if (milestone.originalDate && milestone.originalDate !== milestone.dueDate) {
+                    scheduleStatus = 'Late';
+                    scheduleClass = 'schedule-late';
+                } else {
+                    scheduleStatus = `In Progress - ${progress}%`;
+                    scheduleClass = 'schedule-on-track';
+                }
+
+                // Table row (clickable)
+                tableHTML += `
+                    <tr class="milestone-row" onclick="toggleMilestoneAccordion('${milestone.id}')" style="cursor: pointer;">
+                        <td><span class="milestone-id">${milestone.id}</span></td>
+                        <td>
+                            ${milestone.originalDate ? `<span class="period-strikethrough">${milestone.originalDate}</span><br>` : ''}
+                            <span class="period-text">${milestone.dueDate}</span>
+                        </td>
+                        <td>${milestone.theme}</td>
+                        <td>
+                            <div>${progress}%</div>
+                            <div class="progress-bar-container-milestone">
+                                <div class="progress-bar-fill-milestone ${progressClass}" style="width: ${progress}%">
+                                    ${progress}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="schedule-badge ${scheduleClass}">${scheduleStatus}</span>
+                        </td>
+                    </tr>
+                `;
+
+                // Expandable form row (hidden by default)
+                tableHTML += `
+                    <tr class="milestone-accordion-content-row" id="accordion-row-${milestone.id}" style="display: none;">
+                        <td colspan="5" style="padding: 0; background: #f9fafb;">
+                            <div class="milestone-accordion-content-wrapper" style="padding: 1.5rem;">
+                                <form class="milestone-form" id="form-${milestone.id}">
+                                    <!-- Dates Section -->
+                                    <div class="milestone-form-row">
+                                        <div class="milestone-form-group">
+                                            <label>Original Due Date</label>
+                                            <input type="text" class="milestone-input" name="originalDate"
+                                                   value="${milestone.originalDate || ''}"
+                                                   placeholder="e.g., November 30, 2025">
                                         </div>
-                                    </td>
-                                    <td>
-                                        <span class="schedule-badge ${scheduleClass}">${milestone.scheduleStatus}</span>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('')}
+                                        <div class="milestone-form-group">
+                                            <label>Target Due Date <span style="color: #ef4444;">*</span></label>
+                                            <input type="text" class="milestone-input" name="dueDate"
+                                                   value="${milestone.dueDate}"
+                                                   placeholder="e.g., 01/30/26" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Theme Section -->
+                                    <div class="milestone-form-group">
+                                        <label>Milestone Theme <span style="color: #ef4444;">*</span></label>
+                                        <textarea class="milestone-textarea" name="theme" rows="2" required>${milestone.theme}</textarea>
+                                    </div>
+
+                                    <!-- Deliverables Section -->
+                                    <div class="deliverables-section">
+                                        <h4 style="margin-bottom: 1rem; font-size: 1rem; font-weight: 600;">Deliverables</h4>
+                                        <div id="deliverables-${milestone.id}">
+                                            ${milestone.deliverables.map((deliverable, dIndex) => `
+                                                <div class="deliverable-item" data-deliverable-id="${deliverable.id}">
+                                                    <div class="deliverable-header">
+                                                        <span class="deliverable-number">#${dIndex + 1}</span>
+                                                        <button type="button" class="remove-deliverable-btn"
+                                                                onclick="event.stopPropagation(); removeDeliverable('${milestone.id}', '${deliverable.id}')">
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                    <div class="milestone-form-group">
+                                                        <label>Deliverable Name</label>
+                                                        <input type="text" class="milestone-input"
+                                                               name="deliverable-name-${deliverable.id}"
+                                                               value="${deliverable.name}" required>
+                                                    </div>
+                                                    <div class="milestone-form-row">
+                                                        <div class="milestone-form-group">
+                                                            <label>Status</label>
+                                                            <select class="milestone-select" name="deliverable-status-${deliverable.id}"
+                                                                    onchange="updateDeliverableProgress('${milestone.id}', '${deliverable.id}', this.value)">
+                                                                <option value="Not Started" ${deliverable.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
+                                                                <option value="In Progress" ${deliverable.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                                                <option value="Complete" ${deliverable.status === 'Complete' ? 'selected' : ''}>Complete</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="milestone-form-group">
+                                                            <label>Progress %</label>
+                                                            <input type="number" class="milestone-input"
+                                                                   name="deliverable-progress-${deliverable.id}"
+                                                                   id="progress-${deliverable.id}"
+                                                                   value="${deliverable.progress}"
+                                                                   min="0" max="100"
+                                                                   ${deliverable.status !== 'In Progress' ? 'readonly' : ''}>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                        <button type="button" class="add-deliverable-btn"
+                                                onclick="event.stopPropagation(); addDeliverable('${milestone.id}')">
+                                            + Add Deliverable
+                                        </button>
+                                    </div>
+
+                                    <!-- Save Button -->
+                                    <div style="margin-top: 1.5rem; text-align: right;">
+                                        <button type="submit" class="save-milestone-btn">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
                     </tbody>
                 </table>
             `;
 
-            tableContainer.innerHTML = tableHTML;
+            accordionContainer.innerHTML = tableHTML;
+
+            // Attach form submit handlers
+            milestonesData.forEach(milestone => {
+                const form = document.getElementById(`form-${milestone.id}`);
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        saveMilestoneChanges(milestone.id);
+                    });
+                }
+            });
+        }
+
+        // ===== MILESTONE ACCORDION HELPER FUNCTIONS =====
+        function toggleMilestoneAccordion(milestoneId) {
+            const accordionRow = document.getElementById(`accordion-row-${milestoneId}`);
+            if (accordionRow) {
+                // Toggle visibility
+                if (accordionRow.style.display === 'none' || accordionRow.style.display === '') {
+                    accordionRow.style.display = 'table-row';
+                } else {
+                    accordionRow.style.display = 'none';
+                }
+            }
+        }
+
+        function updateDeliverableProgress(milestoneId, deliverableId, status) {
+            const progressInput = document.getElementById(`progress-${deliverableId}`);
+            if (!progressInput) return;
+
+            // Auto-set progress based on status
+            if (status === 'Not Started') {
+                progressInput.value = 0;
+                progressInput.readOnly = true;
+            } else if (status === 'Complete') {
+                progressInput.value = 100;
+                progressInput.readOnly = true;
+            } else if (status === 'In Progress') {
+                progressInput.readOnly = false;
+                // Keep current value or default to 50 if it's 0 or 100
+                if (progressInput.value == 0 || progressInput.value == 100) {
+                    progressInput.value = 50;
+                }
+            }
+        }
+
+        function addDeliverable(milestoneId) {
+            const milestone = milestonesData.find(m => m.id === milestoneId);
+            if (!milestone) return;
+
+            // Generate new deliverable ID
+            const newId = `${milestoneId.toLowerCase()}-${Date.now()}`;
+            const newDeliverable = {
+                id: newId,
+                name: '',
+                status: 'Not Started',
+                progress: 0
+            };
+
+            milestone.deliverables.push(newDeliverable);
+
+            // Re-render the table to show the new deliverable
+            renderMilestoneAccordion();
+
+            // Keep the accordion row open
+            const accordionRow = document.getElementById(`accordion-row-${milestoneId}`);
+            if (accordionRow) {
+                accordionRow.style.display = 'table-row';
+            }
+
+            // Focus on the new deliverable's name input
+            setTimeout(() => {
+                const newInput = document.querySelector(`input[name="deliverable-name-${newId}"]`);
+                if (newInput) {
+                    newInput.focus();
+                    newInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+
+        function removeDeliverable(milestoneId, deliverableId) {
+            const milestone = milestonesData.find(m => m.id === milestoneId);
+            if (!milestone) return;
+
+            // Don't allow removing the last deliverable
+            if (milestone.deliverables.length <= 1) {
+                alert('Each milestone must have at least one deliverable.');
+                return;
+            }
+
+            // Confirm deletion
+            if (!confirm('Are you sure you want to remove this deliverable?')) {
+                return;
+            }
+
+            // Remove deliverable from array
+            milestone.deliverables = milestone.deliverables.filter(d => d.id !== deliverableId);
+
+            // Re-render the table
+            renderMilestoneAccordion();
+
+            // Keep accordion row open
+            const accordionRow = document.getElementById(`accordion-row-${milestoneId}`);
+            if (accordionRow) {
+                accordionRow.style.display = 'table-row';
+            }
+        }
+
+        function saveMilestoneChanges(milestoneId) {
+            const milestone = milestonesData.find(m => m.id === milestoneId);
+            if (!milestone) return;
+
+            const form = document.getElementById(`form-${milestoneId}`);
+            if (!form) return;
+
+            // Get form data
+            const formData = new FormData(form);
+
+            // Update milestone basic info
+            milestone.originalDate = formData.get('originalDate') || null;
+            milestone.dueDate = formData.get('dueDate');
+            milestone.theme = formData.get('theme');
+
+            // Update deliverables
+            milestone.deliverables.forEach(deliverable => {
+                const name = formData.get(`deliverable-name-${deliverable.id}`);
+                const status = formData.get(`deliverable-status-${deliverable.id}`);
+                const progress = parseInt(formData.get(`deliverable-progress-${deliverable.id}`)) || 0;
+
+                deliverable.name = name;
+                deliverable.status = status;
+                deliverable.progress = progress;
+            });
+
+            // Save to localStorage
+            saveMilestoneDataToStorage(milestonesData);
+
+            // Re-render the table to update the progress bar
+            renderMilestoneAccordion();
+
+            // Keep the accordion row open
+            const accordionRow = document.getElementById(`accordion-row-${milestoneId}`);
+            if (accordionRow) {
+                accordionRow.style.display = 'table-row';
+            }
+
+            // Show success message in the re-rendered form
+            setTimeout(() => {
+                const saveBtn = document.querySelector(`#form-${milestoneId} .save-milestone-btn`);
+                if (saveBtn) {
+                    const originalText = saveBtn.textContent;
+                    saveBtn.textContent = '✓ Saved!';
+                    saveBtn.style.background = '#10b981';
+                    setTimeout(() => {
+                        saveBtn.textContent = originalText;
+                        saveBtn.style.background = '';
+                    }, 2000);
+                }
+            }, 100);
         }
 
         function renderRisksTable() {
             const tableContainer = document.getElementById('risksTable');
 
+            let tableHTML = `
+                <div class="edit-controls" style="margin-bottom: 1rem; text-align: right;">
+                    <button class="add-deliverable-btn" onclick="addRisk()" style="width: auto; padding: 0.5rem 1.5rem;">
+                        + Add New Risk/Blocker
+                    </button>
+                </div>
+            `;
+
             if (risksData.length === 0) {
-                tableContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #6b7280;">No risks or blockers</p>';
+                tableHTML += '<p style="text-align: center; padding: 2rem; color: #6b7280;">No risks or blockers. Click "Add New Risk/Blocker" to add one.</p>';
+                tableContainer.innerHTML = tableHTML;
                 return;
             }
 
-            const tableHTML = `
+            tableHTML += `
                 <table class="milestone-table">
                     <thead>
                         <tr>
@@ -2894,27 +3519,219 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                         </tr>
                     </thead>
                     <tbody>
-                        ${risksData.map(risk => {
-                            return `
-                                <tr>
-                                    <td>${risk.status}</td>
-                                    <td><strong>${risk.type}</strong></td>
-                                    <td>${risk.details}</td>
-                                    <td>
-                                        <span class="priority-badge priority-${risk.priority}">
-                                            ${risk.priority} ${risk.priority === 1 ? 'High' : risk.priority === 2 ? 'Med' : 'Low'}
-                                        </span>
-                                    </td>
-                                    <td>${risk.owner}</td>
-                                    <td style="white-space: pre-wrap;">${risk.statusImpact}</td>
-                                </tr>
-                            `;
-                        }).join('')}
+            `;
+
+            risksData.forEach((risk, index) => {
+                // Table row (clickable)
+                tableHTML += `
+                    <tr class="milestone-row" onclick="toggleRiskAccordion('${risk.id}')" style="cursor: pointer;">
+                        <td>${risk.status}</td>
+                        <td><strong>${risk.type}</strong></td>
+                        <td>${risk.details}</td>
+                        <td>
+                            <span class="priority-badge priority-${risk.priority}">
+                                ${risk.priority} ${risk.priority === 1 ? 'High' : risk.priority === 2 ? 'Med' : 'Low'}
+                            </span>
+                        </td>
+                        <td>${risk.owner}</td>
+                        <td style="white-space: pre-wrap;">${risk.statusImpact}</td>
+                    </tr>
+                `;
+
+                // Expandable form row (hidden by default)
+                tableHTML += `
+                    <tr class="milestone-accordion-content-row" id="risk-accordion-row-${risk.id}" style="display: none;">
+                        <td colspan="6" style="padding: 0; background: #f9fafb;">
+                            <div class="milestone-accordion-content-wrapper" style="padding: 1.5rem;">
+                                <form class="milestone-form" id="risk-form-${risk.id}">
+                                    <div class="milestone-form-row">
+                                        <div class="milestone-form-group">
+                                            <label>Status <span style="color: #ef4444;">*</span></label>
+                                            <select class="milestone-select" name="status" required>
+                                                <option value="Open" ${risk.status === 'Open' ? 'selected' : ''}>Open</option>
+                                                <option value="Monitor" ${risk.status === 'Monitor' ? 'selected' : ''}>Monitor</option>
+                                                <option value="Closed" ${risk.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                                            </select>
+                                        </div>
+                                        <div class="milestone-form-group">
+                                            <label>Type <span style="color: #ef4444;">*</span></label>
+                                            <select class="milestone-select" name="type" required>
+                                                <option value="Risk" ${risk.type === 'Risk' ? 'selected' : ''}>Risk</option>
+                                                <option value="Issue" ${risk.type === 'Issue' ? 'selected' : ''}>Issue</option>
+                                                <option value="Block" ${risk.type === 'Block' ? 'selected' : ''}>Block</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="milestone-form-group">
+                                        <label>Details <span style="color: #ef4444;">*</span></label>
+                                        <textarea class="milestone-textarea" name="details" rows="2" required>${risk.details}</textarea>
+                                    </div>
+
+                                    <div class="milestone-form-row">
+                                        <div class="milestone-form-group">
+                                            <label>Priority <span style="color: #ef4444;">*</span></label>
+                                            <select class="milestone-select" name="priority" required>
+                                                <option value="1" ${risk.priority === 1 ? 'selected' : ''}>1 - High</option>
+                                                <option value="2" ${risk.priority === 2 ? 'selected' : ''}>2 - Medium</option>
+                                                <option value="3" ${risk.priority === 3 ? 'selected' : ''}>3 - Low</option>
+                                            </select>
+                                        </div>
+                                        <div class="milestone-form-group">
+                                            <label>Owner <span style="color: #ef4444;">*</span></label>
+                                            <input type="text" class="milestone-input" name="owner"
+                                                   value="${risk.owner}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="milestone-form-group">
+                                        <label>Status/Impact/Decision <span style="color: #ef4444;">*</span></label>
+                                        <textarea class="milestone-textarea" name="statusImpact" rows="4" required>${risk.statusImpact}</textarea>
+                                    </div>
+
+                                    <div style="margin-top: 1.5rem; display: flex; justify-content: space-between;">
+                                        <button type="button" class="remove-deliverable-btn"
+                                                onclick="event.stopPropagation(); removeRisk('${risk.id}')"
+                                                style="background: #ef4444;">
+                                            Delete Risk
+                                        </button>
+                                        <button type="submit" class="save-milestone-btn">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
                     </tbody>
                 </table>
             `;
 
             tableContainer.innerHTML = tableHTML;
+
+            // Attach form submit handlers
+            risksData.forEach(risk => {
+                const form = document.getElementById(`risk-form-${risk.id}`);
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        saveRiskChanges(risk.id);
+                    });
+                }
+            });
+        }
+
+        // ===== RISKS & BLOCKERS HELPER FUNCTIONS =====
+        function toggleRiskAccordion(riskId) {
+            const accordionRow = document.getElementById(`risk-accordion-row-${riskId}`);
+            if (accordionRow) {
+                // Toggle visibility
+                if (accordionRow.style.display === 'none' || accordionRow.style.display === '') {
+                    accordionRow.style.display = 'table-row';
+                } else {
+                    accordionRow.style.display = 'none';
+                }
+            }
+        }
+
+        function addRisk() {
+            // Generate new risk ID
+            const newId = `risk-${Date.now()}`;
+            const newRisk = {
+                id: newId,
+                status: 'Open',
+                type: 'Risk',
+                details: '',
+                priority: 2,
+                owner: '',
+                statusImpact: ''
+            };
+
+            risksData.push(newRisk);
+
+            // Re-render the table
+            renderRisksTable();
+
+            // Open the new risk's accordion row
+            const accordionRow = document.getElementById(`risk-accordion-row-${newId}`);
+            if (accordionRow) {
+                accordionRow.style.display = 'table-row';
+            }
+
+            // Focus on the details textarea
+            setTimeout(() => {
+                const detailsInput = document.querySelector(`#risk-form-${newId} textarea[name="details"]`);
+                if (detailsInput) {
+                    detailsInput.focus();
+                    detailsInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+
+        function removeRisk(riskId) {
+            // Confirm deletion
+            if (!confirm('Are you sure you want to delete this risk/blocker?')) {
+                return;
+            }
+
+            // Remove risk from array
+            const index = risksData.findIndex(r => r.id === riskId);
+            if (index !== -1) {
+                risksData.splice(index, 1);
+            }
+
+            // Save to localStorage
+            saveRisksDataToStorage(risksData);
+
+            // Re-render the table
+            renderRisksTable();
+        }
+
+        function saveRiskChanges(riskId) {
+            const risk = risksData.find(r => r.id === riskId);
+            if (!risk) return;
+
+            const form = document.getElementById(`risk-form-${riskId}`);
+            if (!form) return;
+
+            // Get form data
+            const formData = new FormData(form);
+
+            // Update risk
+            risk.status = formData.get('status');
+            risk.type = formData.get('type');
+            risk.details = formData.get('details');
+            risk.priority = parseInt(formData.get('priority'));
+            risk.owner = formData.get('owner');
+            risk.statusImpact = formData.get('statusImpact');
+
+            // Save to localStorage
+            saveRisksDataToStorage(risksData);
+
+            // Re-render the table
+            renderRisksTable();
+
+            // Keep the accordion row open
+            const accordionRow = document.getElementById(`risk-accordion-row-${riskId}`);
+            if (accordionRow) {
+                accordionRow.style.display = 'table-row';
+            }
+
+            // Show success message
+            setTimeout(() => {
+                const saveBtn = document.querySelector(`#risk-form-${riskId} .save-milestone-btn`);
+                if (saveBtn) {
+                    const originalText = saveBtn.textContent;
+                    saveBtn.textContent = '✓ Saved!';
+                    saveBtn.style.background = '#10b981';
+                    setTimeout(() => {
+                        saveBtn.textContent = originalText;
+                        saveBtn.style.background = '';
+                    }, 2000);
+                }
+            }, 100);
         }
 
         function renderIssueTable(tickets) {
@@ -2964,19 +3781,17 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 const epicBreakdown = getEpicBreakdown(allTickets);
                 const sprintProgress = getSprintProgress(allTickets);
                 const sprintMetrics = getCurrentSprintMetrics(allTickets);
-                const narrative = generateNarrative(metrics);
 
-                renderExecutiveSummary(allTickets, metrics);
+                renderExecutiveSummary(milestonesData, allTickets, risksData);
                 renderMetrics(metrics, dateProgress);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
                 renderCurrentSprintChart(sprintMetrics);
                 renderCriticalPathTable(allTickets);
-                renderMilestoneTable();
+                renderMilestoneAccordion();
                 renderRisksTable();
                 renderIssueTable(allTickets);
 
-                document.getElementById('narrativeText').textContent = narrative;
                 document.getElementById('lastUpdated').textContent = `Last updated: ${new Date().toLocaleString()}`;
 
                 return true;
@@ -3070,50 +3885,6 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             hideDemoWarning();
         });
 
-        // ===== MILESTONE MODAL EVENT LISTENERS =====
-        // Open modal
-        document.getElementById('updateMilestoneBtn').addEventListener('click', () => {
-            openMilestoneModal();
-        });
-
-        // Close modal
-        document.getElementById('modalCloseBtn').addEventListener('click', () => {
-            closeMilestoneModal();
-        });
-
-        document.getElementById('modalOverlay').addEventListener('click', () => {
-            closeMilestoneModal();
-        });
-
-        // Tab switching
-        document.querySelectorAll('.modal-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const tabName = e.target.getAttribute('data-tab');
-                switchModalTab(tabName);
-            });
-        });
-
-        // Preview button
-        document.getElementById('modalPreviewBtn').addEventListener('click', () => {
-            // Check which tab is active
-            const activeTab = document.querySelector('.modal-tab.active').getAttribute('data-tab');
-            if (activeTab === 'milestones') {
-                previewMilestoneData();
-            } else if (activeTab === 'risks') {
-                previewRisksData();
-            }
-        });
-
-        // Apply button
-        document.getElementById('modalApplyBtn').addEventListener('click', () => {
-            applyMilestoneChanges();
-        });
-
-        // Reset button
-        document.getElementById('modalResetBtn').addEventListener('click', () => {
-            resetToSampleData();
-        });
-
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             // P = Toggle presentation mode
@@ -3192,7 +3963,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             }
 
             // Render milestone data immediately (doesn't depend on CSV)
-            renderMilestoneTable();
+            renderMilestoneAccordion();
             renderRisksTable();
 
             // Load data
