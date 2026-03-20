@@ -1758,7 +1758,6 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         <!-- Section Navigation -->
         <div class="section-nav">
             <span class="section-nav-label">Jump to:</span>
-            <button class="section-nav-btn" onclick="document.getElementById('summarySection').scrollIntoView()">Summary</button>
             <button class="section-nav-btn" onclick="document.getElementById('metricsSection').scrollIntoView()">Metrics</button>
             <button class="section-nav-btn" onclick="document.getElementById('chartsSection').scrollIntoView()">Charts</button>
             <button class="section-nav-btn" onclick="document.getElementById('tableSection').scrollIntoView()">Issues</button>
@@ -1769,7 +1768,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         </div>
 
         <!-- Executive Summary -->
-        <div class="executive-summary" id="summarySection">
+        <div class="executive-summary" id="summarySection" style="display: none;">
             <h2>Executive Summary</h2>
             <div class="executive-summary-grid" id="executiveSummaryGrid">
                 <!-- Progress, Wins, and Blockers will be populated by JavaScript -->
