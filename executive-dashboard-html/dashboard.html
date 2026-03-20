@@ -1065,6 +1065,206 @@
                 display: none !important;
             }
         }
+
+        /* ===== MODAL STYLES ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            animation: fadeIn 0.2s;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #1f2937;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .modal-tab:hover {
+            color: #6b21a8;
+        }
+
+        .modal-tab.active {
+            color: #6b21a8;
+            border-bottom-color: #6b21a8;
+        }
+
+        .modal-tab-content {
+            display: none;
+        }
+
+        .modal-tab-content.active {
+            display: block;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            resize: vertical;
+        }
+
+        .modal-textarea:focus {
+            outline: none;
+            border-color: #6b21a8;
+            box-shadow: 0 0 0 3px rgba(107, 33, 168, 0.1);
+        }
+
+        .modal-instructions {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+        }
+
+        .modal-instructions h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e40af;
+        }
+
+        .modal-instructions ol {
+            margin-left: 1.5rem;
+            color: #1f2937;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-preview {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .modal-preview h4 {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+        }
+
+        .modal-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+        }
+
+        .modal-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -45%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1078,6 +1278,7 @@
             <div class="header-right">
                 <button class="btn btn-secondary" id="darkModeBtn">Dark Mode</button>
                 <button class="btn btn-secondary" id="presentationModeBtn">Presentation Mode</button>
+                <button class="btn btn-secondary" id="updateMilestoneBtn">Update Milestone Data</button>
                 <button class="btn btn-primary" id="refreshBtn">Refresh Data</button>
             </div>
         </div>
@@ -1088,6 +1289,71 @@
         <span class="demo-warning-icon">⚠️</span>
         <span class="demo-warning-text">DEMO DATA - You are viewing sample data. Upload your CSV to see real metrics.</span>
         <button class="demo-warning-dismiss" id="dismissDemoWarning">Dismiss</button>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Milestone Data Update Modal -->
+    <div class="modal" id="milestoneModal">
+        <div class="modal-header">
+            <h3 class="modal-title">Update Milestone Data</h3>
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Tabs -->
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="milestones">Milestone Overview</button>
+                <button class="modal-tab" data-tab="risks">Risks & Blockers</button>
+            </div>
+
+            <!-- Milestone Tab Content -->
+            <div class="modal-tab-content active" id="milestones-tab">
+                <div class="modal-instructions">
+                    <h4>How to Update Milestone Data:</h4>
+                    <ol>
+                        <li>Export your Confluence page to Word</li>
+                        <li>Open the Word document and select the entire Milestone Overview table</li>
+                        <li>Copy the table (Ctrl+C or Cmd+C)</li>
+                        <li>Paste it in the textarea below</li>
+                        <li>Click "Preview" to verify the data looks correct</li>
+                        <li>Click "Apply Changes" to update the dashboard</li>
+                    </ol>
+                </div>
+                <textarea class="modal-textarea" id="milestoneTextarea" placeholder="Paste your Milestone Overview table here...
+
+Expected format (tab-separated):
+Milestone	Period	Theme	Progress Update	Schedule Status
+M1	Sep 26 - Oct 31	Theme description	100%	Completed"></textarea>
+                <div id="milestonePreview"></div>
+            </div>
+
+            <!-- Risks Tab Content -->
+            <div class="modal-tab-content" id="risks-tab">
+                <div class="modal-instructions">
+                    <h4>How to Update Risks Data:</h4>
+                    <ol>
+                        <li>Export your Confluence page to Word</li>
+                        <li>Open the Word document and select the entire Risks & Blockers table</li>
+                        <li>Copy the table (Ctrl+C or Cmd+C)</li>
+                        <li>Paste it in the textarea below</li>
+                        <li>Click "Preview" to verify the data looks correct</li>
+                        <li>Click "Apply Changes" to update the dashboard</li>
+                    </ol>
+                </div>
+                <textarea class="modal-textarea" id="risksTextarea" placeholder="Paste your Risks & Blockers table here...
+
+Expected format (tab-separated):
+Open/Monitor	Risk/Issue/Block	Details	Priority	Owner	Status/Impact/Decision
+Open	Risk	Description	1	Owner Name	Status details"></textarea>
+                <div id="risksPreview"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="modalResetBtn">Reset to Sample Data</button>
+            <button class="btn btn-secondary" id="modalPreviewBtn">Preview</button>
+            <button class="btn btn-primary" id="modalApplyBtn">Apply Changes</button>
+        </div>
     </div>
 
     <div class="container">
@@ -1297,6 +1563,314 @@
                 statusImpact: '3/17 - TAGs promoted to Databricks, AD group mapping required - request via access central\n\n3/16 - Bala - INYBSVP assigned to SNOW request, INYBSVP will work'
             }
         ];
+
+        // ===== LOCAL STORAGE PERSISTENCE =====
+        function loadMilestoneDataFromStorage() {
+            const stored = localStorage.getItem('milestoneData');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error parsing stored milestone data:', e);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        function loadRisksDataFromStorage() {
+            const stored = localStorage.getItem('risksData');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error parsing stored risks data:', e);
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        function saveMilestoneDataToStorage(data) {
+            localStorage.setItem('milestoneData', JSON.stringify(data));
+        }
+
+        function saveRisksDataToStorage(data) {
+            localStorage.setItem('risksData', JSON.stringify(data));
+        }
+
+        // Load data from storage on page load
+        const storedMilestones = loadMilestoneDataFromStorage();
+        const storedRisks = loadRisksDataFromStorage();
+
+        // Override defaults if stored data exists
+        if (storedMilestones) {
+            milestonesData.length = 0;
+            milestonesData.push(...storedMilestones);
+        }
+        if (storedRisks) {
+            risksData.length = 0;
+            risksData.push(...storedRisks);
+        }
+
+        // ===== TABLE DATA PARSER =====
+        function parseTSVData(text) {
+            // Remove empty lines and trim
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+
+            if (lines.length === 0) {
+                throw new Error('No data found');
+            }
+
+            // Parse lines into rows (tab-separated)
+            const rows = lines.map(line => {
+                // Split by tab, but preserve content within cells
+                return line.split('\t').map(cell => cell.trim());
+            });
+
+            return rows;
+        }
+
+        function parseMilestoneData(text) {
+            try {
+                const rows = parseTSVData(text);
+
+                // Skip header row (first row)
+                const dataRows = rows.slice(1);
+
+                if (dataRows.length === 0) {
+                    throw new Error('No milestone data rows found (only header)');
+                }
+
+                const milestones = dataRows.map((row, index) => {
+                    if (row.length < 5) {
+                        throw new Error(`Row ${index + 2} has ${row.length} columns, expected 5`);
+                    }
+
+                    const [id, period, theme, progressStr, scheduleStatus] = row;
+
+                    // Parse progress percentage
+                    const progressMatch = progressStr.match(/(\d+)%/);
+                    const progress = progressMatch ? parseInt(progressMatch[1]) : 0;
+
+                    // Check if period has original and target dates
+                    // Format: "Nov 1-Nov 30" or "Nov 1-Nov 30\nTarget: 01/30/26"
+                    let periodObj = {
+                        original: period,
+                        target: period,
+                        changed: false
+                    };
+
+                    // Look for multiple lines in period cell
+                    const periodLines = period.split(/\n|\\n/).map(l => l.trim());
+                    if (periodLines.length > 1) {
+                        periodObj.original = periodLines[0];
+                        periodObj.target = periodLines[periodLines.length - 1].replace(/^Target:\s*/i, '');
+                        periodObj.changed = true;
+                    }
+
+                    return {
+                        id: id,
+                        period: periodObj,
+                        theme: theme,
+                        progress: progress,
+                        scheduleStatus: scheduleStatus
+                    };
+                });
+
+                return milestones;
+            } catch (error) {
+                throw new Error(`Failed to parse milestone data: ${error.message}`);
+            }
+        }
+
+        function parseRisksData(text) {
+            try {
+                const rows = parseTSVData(text);
+
+                // Skip header row
+                const dataRows = rows.slice(1);
+
+                if (dataRows.length === 0) {
+                    throw new Error('No risks data rows found (only header)');
+                }
+
+                const risks = dataRows.map((row, index) => {
+                    if (row.length < 6) {
+                        throw new Error(`Row ${index + 2} has ${row.length} columns, expected 6`);
+                    }
+
+                    const [status, type, details, priorityStr, owner, statusImpact] = row;
+
+                    // Parse priority number
+                    const priorityMatch = priorityStr.match(/(\d+)/);
+                    const priority = priorityMatch ? parseInt(priorityMatch[1]) : 2;
+
+                    return {
+                        status: status,
+                        type: type,
+                        details: details,
+                        priority: priority,
+                        owner: owner,
+                        statusImpact: statusImpact
+                    };
+                });
+
+                return risks;
+            } catch (error) {
+                throw new Error(`Failed to parse risks data: ${error.message}`);
+            }
+        }
+
+        // ===== MODAL FUNCTIONS =====
+        function openMilestoneModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.getElementById('milestoneModal').classList.add('active');
+        }
+
+        function closeMilestoneModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.getElementById('milestoneModal').classList.remove('active');
+            // Clear preview areas
+            document.getElementById('milestonePreview').innerHTML = '';
+            document.getElementById('risksPreview').innerHTML = '';
+        }
+
+        function switchModalTab(tabName) {
+            // Remove active class from all tabs and content
+            document.querySelectorAll('.modal-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.modal-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Add active class to selected tab and content
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function previewMilestoneData() {
+            const textarea = document.getElementById('milestoneTextarea');
+            const previewDiv = document.getElementById('milestonePreview');
+
+            previewDiv.innerHTML = '';
+
+            if (!textarea.value.trim()) {
+                previewDiv.innerHTML = '<div class="modal-error">Please paste milestone data first.</div>';
+                return;
+            }
+
+            try {
+                const parsedData = parseMilestoneData(textarea.value);
+
+                let html = '<div class="modal-success">Successfully parsed ' + parsedData.length + ' milestone(s)!</div>';
+                html += '<div class="modal-preview"><h4>Preview:</h4><ul>';
+
+                parsedData.forEach(m => {
+                    html += `<li><strong>${m.id}</strong>: ${m.theme} - ${m.progress}% (${m.scheduleStatus})</li>`;
+                });
+
+                html += '</ul></div>';
+                previewDiv.innerHTML = html;
+            } catch (error) {
+                previewDiv.innerHTML = '<div class="modal-error"><strong>Error:</strong> ' + error.message + '</div>';
+            }
+        }
+
+        function previewRisksData() {
+            const textarea = document.getElementById('risksTextarea');
+            const previewDiv = document.getElementById('risksPreview');
+
+            previewDiv.innerHTML = '';
+
+            if (!textarea.value.trim()) {
+                previewDiv.innerHTML = '<div class="modal-error">Please paste risks data first.</div>';
+                return;
+            }
+
+            try {
+                const parsedData = parseRisksData(textarea.value);
+
+                let html = '<div class="modal-success">Successfully parsed ' + parsedData.length + ' risk(s)!</div>';
+                html += '<div class="modal-preview"><h4>Preview:</h4><ul>';
+
+                parsedData.forEach(r => {
+                    html += `<li><strong>${r.type}</strong>: ${r.details} (Priority ${r.priority})</li>`;
+                });
+
+                html += '</ul></div>';
+                previewDiv.innerHTML = html;
+            } catch (error) {
+                previewDiv.innerHTML = '<div class="modal-error"><strong>Error:</strong> ' + error.message + '</div>';
+            }
+        }
+
+        function applyMilestoneChanges() {
+            const milestoneText = document.getElementById('milestoneTextarea').value;
+            const risksText = document.getElementById('risksTextarea').value;
+
+            let milestonesUpdated = false;
+            let risksUpdated = false;
+
+            // Update milestones if data is present
+            if (milestoneText.trim()) {
+                try {
+                    const parsedMilestones = parseMilestoneData(milestoneText);
+                    milestonesData.length = 0;
+                    milestonesData.push(...parsedMilestones);
+                    saveMilestoneDataToStorage(parsedMilestones);
+                    milestonesUpdated = true;
+                } catch (error) {
+                    alert('Error applying milestone data: ' + error.message);
+                    return;
+                }
+            }
+
+            // Update risks if data is present
+            if (risksText.trim()) {
+                try {
+                    const parsedRisks = parseRisksData(risksText);
+                    risksData.length = 0;
+                    risksData.push(...parsedRisks);
+                    saveRisksDataToStorage(parsedRisks);
+                    risksUpdated = true;
+                } catch (error) {
+                    alert('Error applying risks data: ' + error.message);
+                    return;
+                }
+            }
+
+            // Re-render tables
+            if (milestonesUpdated) {
+                renderMilestoneTable();
+            }
+            if (risksUpdated) {
+                renderRisksTable();
+            }
+
+            // Close modal and show success
+            closeMilestoneModal();
+
+            if (milestonesUpdated || risksUpdated) {
+                alert('Data updated successfully! Changes saved to browser storage.');
+            } else {
+                alert('No data was provided to update.');
+            }
+        }
+
+        function resetToSampleData() {
+            if (!confirm('This will reset milestone and risks data to sample data. Continue?')) {
+                return;
+            }
+
+            // Clear localStorage
+            localStorage.removeItem('milestoneData');
+            localStorage.removeItem('risksData');
+
+            // Reload page to reset to defaults
+            location.reload();
+        }
 
         // ===== DEMO DATA WARNING =====
         function showDemoWarning() {
@@ -2494,6 +3068,50 @@
         // Dismiss demo warning banner
         document.getElementById('dismissDemoWarning').addEventListener('click', () => {
             hideDemoWarning();
+        });
+
+        // ===== MILESTONE MODAL EVENT LISTENERS =====
+        // Open modal
+        document.getElementById('updateMilestoneBtn').addEventListener('click', () => {
+            openMilestoneModal();
+        });
+
+        // Close modal
+        document.getElementById('modalCloseBtn').addEventListener('click', () => {
+            closeMilestoneModal();
+        });
+
+        document.getElementById('modalOverlay').addEventListener('click', () => {
+            closeMilestoneModal();
+        });
+
+        // Tab switching
+        document.querySelectorAll('.modal-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const tabName = e.target.getAttribute('data-tab');
+                switchModalTab(tabName);
+            });
+        });
+
+        // Preview button
+        document.getElementById('modalPreviewBtn').addEventListener('click', () => {
+            // Check which tab is active
+            const activeTab = document.querySelector('.modal-tab.active').getAttribute('data-tab');
+            if (activeTab === 'milestones') {
+                previewMilestoneData();
+            } else if (activeTab === 'risks') {
+                previewRisksData();
+            }
+        });
+
+        // Apply button
+        document.getElementById('modalApplyBtn').addEventListener('click', () => {
+            applyMilestoneChanges();
+        });
+
+        // Reset button
+        document.getElementById('modalResetBtn').addEventListener('click', () => {
+            resetToSampleData();
         });
 
         // Keyboard shortcuts
