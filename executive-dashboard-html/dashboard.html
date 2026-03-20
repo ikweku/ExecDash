@@ -1806,7 +1806,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Current Sprint Metrics</div>
+                <div class="chart-title">Total Ticket Status</div>
                 <div class="chart-container">
                     <canvas id="sprintVelocityChart"></canvas>
                 </div>
@@ -2349,12 +2349,15 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             // Calculate totals (use story points if available, otherwise ticket count)
             const totalPoints = tickets.reduce((sum, t) => sum + (t.storyPoints || 0), 0);
             const completedPoints = tickets.filter(t => t.status === 'Done').reduce((sum, t) => sum + (t.storyPoints || 0), 0);
-            const inProgressPoints = tickets.filter(t => t.status === 'In Progress').reduce((sum, t) => sum + (t.storyPoints || 0), 0);
+
+            // Include In Progress, In Review, and In Testing in the "In Progress" bar
+            const inProgressStatuses = ['In Progress', 'In Review', 'In Testing'];
+            const inProgressPoints = tickets.filter(t => inProgressStatuses.includes(t.status)).reduce((sum, t) => sum + (t.storyPoints || 0), 0);
 
             const useTicketCount = totalPoints === 0;
             const committed = useTicketCount ? tickets.length : totalPoints;
             const completed = useTicketCount ? tickets.filter(t => t.status === 'Done').length : completedPoints;
-            const inProgress = useTicketCount ? tickets.filter(t => t.status === 'In Progress').length : inProgressPoints;
+            const inProgress = useTicketCount ? tickets.filter(t => inProgressStatuses.includes(t.status)).length : inProgressPoints;
             const unit = useTicketCount ? 'Tickets' : 'Story Points';
 
             return {
@@ -2896,11 +2899,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 charts.sprintVelocity.destroy();
             }
 
-            // Update chart title
-            const chartTitle = document.querySelector('#chartsSection .chart-card:nth-child(3) .chart-title');
-            if (chartTitle) {
-                chartTitle.textContent = `Sprint ${sprintMetrics.sprintNumber} - ${sprintMetrics.unit}`;
-            }
+            // Chart title is now static in HTML as "Total Ticket Status"
 
             charts.sprintVelocity = new Chart(ctx, {
                 type: 'bar',
