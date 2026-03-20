@@ -281,6 +281,155 @@
             height: 300px;
         }
 
+        /* Milestone Tracker Section */
+        .milestone-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #6b21a8;
+        }
+
+        .milestone-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .milestone-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .milestone-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .milestone-table th {
+            background: #f9fafb;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .milestone-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+
+        .milestone-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .milestone-id {
+            font-weight: 600;
+            color: #6b21a8;
+        }
+
+        .period-text {
+            font-size: 0.875rem;
+        }
+
+        .period-strikethrough {
+            text-decoration: line-through;
+            color: #9ca3af;
+            display: block;
+            font-size: 0.8rem;
+        }
+
+        .progress-bar-container-milestone {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 0.25rem;
+            height: 1.25rem;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+
+        .progress-bar-fill-milestone {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            transition: width 0.3s ease;
+        }
+
+        .progress-bar-fill-milestone.high {
+            background: #10b981;
+        }
+
+        .progress-bar-fill-milestone.medium {
+            background: #f59e0b;
+        }
+
+        .progress-bar-fill-milestone.low {
+            background: #ef4444;
+        }
+
+        .schedule-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .schedule-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .schedule-on-track {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .schedule-late {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-1 {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .priority-2 {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        .priority-3 {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
         /* Issue tracker */
         .issue-tracker {
             background: white;
@@ -1017,6 +1166,29 @@
             </div>
         </div>
 
+        <!-- Milestone Tracker Section -->
+        <div class="milestone-section">
+            <div class="section-header">
+                <h2 class="section-title">Milestone Tracker</h2>
+            </div>
+
+            <!-- Milestone Overview Table -->
+            <div class="milestone-card">
+                <div class="chart-title">Milestone Overview</div>
+                <div id="milestoneTable" style="overflow-x: auto;">
+                    <!-- Milestone table will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Risks & Blockers Table -->
+            <div class="milestone-card">
+                <div class="chart-title">Risks & Blockers</div>
+                <div id="risksTable" style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
+                    <!-- Risks table will be inserted here -->
+                </div>
+            </div>
+        </div>
+
         <!-- Executive Narrative -->
         <div class="narrative-section">
             <div class="narrative-title">Executive Summary</div>
@@ -1055,6 +1227,76 @@
         let charts = {};
         let activeFilter = null; // Track active filter: 'done', 'in-progress', 'in-review', 'todo', 'blocked', or null
         let isUsingDemoData = false; // Track if we're viewing demo/sample data
+
+        // ===== MILESTONE DATA =====
+        // TO UPDATE: Edit this data structure with your Confluence milestone information
+        const milestonesData = [
+            {
+                id: 'M1',
+                period: {
+                    original: 'Sep 26 - Oct 31',
+                    target: 'Oct 31, 2025',
+                    changed: false
+                },
+                theme: 'Enhance CORE DOMO + Elysium Architecture',
+                progress: 100,
+                scheduleStatus: 'Completed'
+            },
+            {
+                id: 'M2',
+                period: {
+                    original: 'Nov 1 - Nov 30',
+                    target: '01/30/26',
+                    changed: true
+                },
+                theme: 'Elysium Design delayed+ Predictive Monitoring UI Design sign off received',
+                progress: 75,
+                scheduleStatus: 'Late'
+            },
+            {
+                id: 'M3',
+                period: {
+                    original: 'Dec 1 - Dec 31',
+                    target: '02/28/26',
+                    changed: true
+                },
+                theme: 'Elysium Development Complete + Predictive Monitoring Production Deployed',
+                progress: 75,
+                scheduleStatus: 'Predictive - Completed, signed off 3/6\nElysium in progress'
+            },
+            {
+                id: 'M4',
+                period: {
+                    original: 'Jan 1 - Jan 16',
+                    target: '03/31/2026',
+                    changed: true
+                },
+                theme: 'Elysium',
+                progress: 20,
+                scheduleStatus: 'In Progress - 20%'
+            }
+        ];
+
+        // ===== RISKS & BLOCKERS DATA =====
+        // TO UPDATE: Edit this data structure with your Confluence risks information
+        const risksData = [
+            {
+                status: 'Open',
+                type: 'Risk',
+                details: 'DOMO Vulnerabilities',
+                priority: 1,
+                owner: 'CONATOS',
+                statusImpact: 'DOMO Vulnerabilities identified 3/10, fixes deployed in EKS cluster. Access to vulnerability report requested to validate the fix'
+            },
+            {
+                status: 'Open',
+                type: 'Risk',
+                details: 'TAG creation/mapping - Will be a blocker to Databricks-Elysium connection - must be',
+                priority: 2,
+                owner: 'CONKKA',
+                statusImpact: '3/17 - TAGs promoted to Databricks, AD group mapping required - request via access central\n\n3/16 - Bala - INYBSVP assigned to SNOW request, INYBSVP will work'
+            }
+        ];
 
         // ===== DEMO DATA WARNING =====
         function showDemoWarning() {
@@ -1998,6 +2240,109 @@
             tableContainer.innerHTML = tableHTML;
         }
 
+        function renderMilestoneTable() {
+            const tableContainer = document.getElementById('milestoneTable');
+
+            if (milestonesData.length === 0) {
+                tableContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #6b7280;">No milestone data available</p>';
+                return;
+            }
+
+            const tableHTML = `
+                <table class="milestone-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Milestone</th>
+                            <th style="width: 200px;">Period</th>
+                            <th>Theme</th>
+                            <th style="width: 200px;">Progress Update</th>
+                            <th style="width: 150px;">Schedule Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${milestonesData.map(milestone => {
+                            const progressClass = milestone.progress >= 70 ? 'high' : milestone.progress >= 50 ? 'medium' : 'low';
+
+                            let scheduleClass = 'schedule-on-track';
+                            if (milestone.scheduleStatus.toLowerCase().includes('late')) {
+                                scheduleClass = 'schedule-late';
+                            } else if (milestone.scheduleStatus.toLowerCase().includes('completed')) {
+                                scheduleClass = 'schedule-completed';
+                            }
+
+                            return `
+                                <tr>
+                                    <td><span class="milestone-id">${milestone.id}</span></td>
+                                    <td>
+                                        ${milestone.period.changed ? `<span class="period-strikethrough">${milestone.period.original}</span>` : ''}
+                                        <span class="period-text">${milestone.period.target}</span>
+                                    </td>
+                                    <td>${milestone.theme}</td>
+                                    <td>
+                                        <div>${milestone.progress}%</div>
+                                        <div class="progress-bar-container-milestone">
+                                            <div class="progress-bar-fill-milestone ${progressClass}" style="width: ${milestone.progress}%">
+                                                ${milestone.progress}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="schedule-badge ${scheduleClass}">${milestone.scheduleStatus}</span>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        function renderRisksTable() {
+            const tableContainer = document.getElementById('risksTable');
+
+            if (risksData.length === 0) {
+                tableContainer.innerHTML = '<p style="text-align: center; padding: 2rem; color: #6b7280;">No risks or blockers</p>';
+                return;
+            }
+
+            const tableHTML = `
+                <table class="milestone-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Open/Monitor</th>
+                            <th style="width: 120px;">Risk/Issue/Block</th>
+                            <th>Details</th>
+                            <th style="width: 100px;">Priority</th>
+                            <th style="width: 120px;">Owner</th>
+                            <th>Status/Impact/Decision</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${risksData.map(risk => {
+                            return `
+                                <tr>
+                                    <td>${risk.status}</td>
+                                    <td><strong>${risk.type}</strong></td>
+                                    <td>${risk.details}</td>
+                                    <td>
+                                        <span class="priority-badge priority-${risk.priority}">
+                                            ${risk.priority} ${risk.priority === 1 ? 'High' : risk.priority === 2 ? 'Med' : 'Low'}
+                                        </span>
+                                    </td>
+                                    <td>${risk.owner}</td>
+                                    <td style="white-space: pre-wrap;">${risk.statusImpact}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            tableContainer.innerHTML = tableHTML;
+        }
+
         function renderIssueTable(tickets) {
             const tbody = document.getElementById('issueTableBody');
 
@@ -2053,6 +2398,8 @@
                 renderEpicBreakdownChart(epicBreakdown);
                 renderCurrentSprintChart(sprintMetrics);
                 renderCriticalPathTable(allTickets);
+                renderMilestoneTable();
+                renderRisksTable();
                 renderIssueTable(allTickets);
 
                 document.getElementById('narrativeText').textContent = narrative;
@@ -2225,6 +2572,10 @@
                 document.body.classList.add('dark-mode');
                 document.getElementById('darkModeBtn').textContent = 'Light Mode';
             }
+
+            // Render milestone data immediately (doesn't depend on CSV)
+            renderMilestoneTable();
+            renderRisksTable();
 
             // Load data
             loadDefaultData();
