@@ -134,26 +134,45 @@
             transition: width 0.3s ease;
         }
 
+        .sprint-indicators-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
         .sprint-indicator {
             position: absolute;
             top: -5px;
-            width: 3px;
+            width: 2px;
             height: calc(100% + 10px);
-            background: #6366f1;
+            background: #94a3b8;
             z-index: 10;
             transition: left 0.3s ease;
         }
 
-        .sprint-indicator::before {
-            content: 'Current Sprint';
+        .sprint-indicator.current {
+            width: 3px;
+            background: #6366f1;
+        }
+
+        .sprint-indicator .sprint-label {
             position: absolute;
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .sprint-indicator.current .sprint-label {
             color: #6366f1;
             font-weight: 600;
-            white-space: nowrap;
+            font-size: 0.7rem;
         }
 
         /* Metric cards grid - single row, auto-fit */
@@ -1806,7 +1825,9 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             </div>
             <div class="progress-bar">
                 <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
-                <div class="sprint-indicator" id="sprintIndicator" style="left: 0%; display: none;"></div>
+                <div class="sprint-indicators-container" id="sprintIndicatorsContainer">
+                    <!-- Sprint indicators will be dynamically added here -->
+                </div>
             </div>
         </div>
 
@@ -2631,13 +2652,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             };
         }
 
-        function calculateCurrentSprintPosition(tickets) {
-            if (!tickets || tickets.length === 0) {
+        function calculateSprintPositions(tickets, dateProgress) {
+            if (!tickets || tickets.length === 0 || !dateProgress) {
                 return null;
             }
 
             // Extract sprint numbers from sprint names
-            const sprintNumbers = [];
+            const sprintNumbersSet = new Set();
             tickets.forEach(ticket => {
                 if (ticket.sprint) {
                     // Extract the last number from sprint name (e.g., "DOMO R2 Sprint 11" -> 11)
@@ -2645,28 +2666,47 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                     if (matches && matches.length > 0) {
                         const sprintNumber = parseInt(matches[matches.length - 1], 10);
                         if (!isNaN(sprintNumber)) {
-                            sprintNumbers.push(sprintNumber);
+                            sprintNumbersSet.add(sprintNumber);
                         }
                     }
                 }
             });
 
-            if (sprintNumbers.length === 0) {
+            if (sprintNumbersSet.size === 0) {
                 return null;
             }
 
-            // Find the highest sprint number (current sprint)
+            const sprintNumbers = Array.from(sprintNumbersSet).sort((a, b) => a - b);
             const currentSprint = Math.max(...sprintNumbers);
             const minSprint = Math.min(...sprintNumbers);
-            const totalSprints = currentSprint - minSprint + 1;
 
-            // Calculate position as a percentage
-            // Assuming sprints are evenly distributed across the timeline
-            const sprintPosition = ((currentSprint - minSprint) / totalSprints) * 100;
+            // Parse start and end dates from dateProgress
+            const startDate = new Date('2026-01-01');
+            const endDate = new Date('2026-04-27');
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+            // Assume 2-week (14-day) sprints
+            const sprintDuration = 14;
+
+            // Calculate positions for each sprint
+            const sprints = sprintNumbers.map(sprintNum => {
+                // Calculate days from start for this sprint
+                // Assuming Sprint 1 started on startDate
+                const sprintStartDay = (sprintNum - 1) * sprintDuration;
+
+                // Calculate position as percentage of total timeline
+                const position = (sprintStartDay / totalDays) * 100;
+
+                return {
+                    number: sprintNum,
+                    position: Math.min(100, Math.max(0, position)),
+                    isCurrent: sprintNum === currentSprint
+                };
+            });
 
             return {
-                currentSprint,
-                sprintPosition: Math.min(100, Math.max(0, sprintPosition))
+                sprints,
+                currentSprint
             };
         }
 
@@ -2710,13 +2750,27 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 document.getElementById('progressFill').style.width = `${metrics.percentComplete}%`;
             }
 
-            // Update sprint indicator position if sprint data is available
-            const sprintIndicator = document.getElementById('sprintIndicator');
-            if (sprintIndicator && sprintData) {
-                sprintIndicator.style.left = `${sprintData.sprintPosition}%`;
-                sprintIndicator.style.display = 'block';
-            } else if (sprintIndicator) {
-                sprintIndicator.style.display = 'none';
+            // Update sprint indicators - render all sprints on timeline
+            const sprintIndicatorsContainer = document.getElementById('sprintIndicatorsContainer');
+            if (sprintIndicatorsContainer && sprintData && sprintData.sprints) {
+                // Clear existing indicators
+                sprintIndicatorsContainer.innerHTML = '';
+
+                // Create indicator for each sprint
+                sprintData.sprints.forEach(sprint => {
+                    const indicator = document.createElement('div');
+                    indicator.className = `sprint-indicator ${sprint.isCurrent ? 'current' : ''}`;
+                    indicator.style.left = `${sprint.position}%`;
+
+                    const label = document.createElement('div');
+                    label.className = 'sprint-label';
+                    label.textContent = `S${sprint.number}`;
+
+                    indicator.appendChild(label);
+                    sprintIndicatorsContainer.appendChild(indicator);
+                });
+            } else if (sprintIndicatorsContainer) {
+                sprintIndicatorsContainer.innerHTML = '';
             }
 
             // Add click event listeners to metric cards
@@ -2762,7 +2816,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             // Re-render with updated filter
             const metrics = calculateMetrics(allTickets);
             const dateProgress = calculateDateBasedProgress(allTickets);
-            const sprintData = calculateCurrentSprintPosition(allTickets);
+            const sprintData = calculateSprintPositions(allTickets, dateProgress);
             renderMetrics(metrics, dateProgress, sprintData);
             renderIssueTable(filteredTickets);
         }
@@ -3856,7 +3910,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
                 const metrics = calculateMetrics(allTickets);
                 const dateProgress = calculateDateBasedProgress(allTickets);
-                const sprintData = calculateCurrentSprintPosition(allTickets);
+                const sprintData = calculateSprintPositions(allTickets, dateProgress);
                 const epicBreakdown = getEpicBreakdown(allTickets);
                 const sprintProgress = getSprintProgress(allTickets);
                 const sprintMetrics = getCurrentSprintMetrics(allTickets);
@@ -3905,7 +3959,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 activeFilter = null;
                 const metrics = calculateMetrics(allTickets);
                 const dateProgress = calculateDateBasedProgress(allTickets);
-                const sprintData = calculateCurrentSprintPosition(allTickets);
+                const sprintData = calculateSprintPositions(allTickets, dateProgress);
                 renderMetrics(metrics, dateProgress, sprintData);
             }
 
@@ -3957,7 +4011,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
             const metrics = calculateMetrics(allTickets);
             const dateProgress = calculateDateBasedProgress(allTickets);
-            const sprintData = calculateCurrentSprintPosition(allTickets);
+            const sprintData = calculateSprintPositions(allTickets, dateProgress);
             renderMetrics(metrics, dateProgress, sprintData);
             renderIssueTable(filteredTickets);
         });
