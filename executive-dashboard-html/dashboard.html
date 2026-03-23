@@ -124,13 +124,36 @@
             height: 1rem;
             background: #e5e7eb;
             border-radius: 9999px;
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
         }
 
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, #10b981 0%, #059669 100%);
             transition: width 0.3s ease;
+        }
+
+        .sprint-indicator {
+            position: absolute;
+            top: -5px;
+            width: 3px;
+            height: calc(100% + 10px);
+            background: #6366f1;
+            z-index: 10;
+            transition: left 0.3s ease;
+        }
+
+        .sprint-indicator::before {
+            content: 'Current Sprint';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: #6366f1;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         /* Metric cards grid - single row, auto-fit */
@@ -1783,6 +1806,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             </div>
             <div class="progress-bar">
                 <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+                <div class="sprint-indicator" id="sprintIndicator" style="left: 0%; display: none;"></div>
             </div>
         </div>
 
@@ -2241,9 +2265,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             const todoTickets = tickets.filter(t => t.status === 'To Do').length;
             const blockedTickets = tickets.filter(t => t.status === 'Blocked').length;
 
+            // Consolidate In Progress and In Review (In Testing) into one metric
+            const inWorkTickets = inProgressTickets + inReviewTickets;
+
             const percentComplete = totalTickets > 0 ? Math.round((doneTickets / totalTickets) * 100) : 0;
             const percentInProgress = totalTickets > 0 ? Math.round((inProgressTickets / totalTickets) * 100) : 0;
             const percentInReview = totalTickets > 0 ? Math.round((inReviewTickets / totalTickets) * 100) : 0;
+            const percentInWork = totalTickets > 0 ? Math.round((inWorkTickets / totalTickets) * 100) : 0;
             const percentRemaining = totalTickets > 0 ? Math.round((todoTickets / totalTickets) * 100) : 0;
             const percentBlocked = totalTickets > 0 ? Math.round((blockedTickets / totalTickets) * 100) : 0;
 
@@ -2252,11 +2280,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 doneTickets,
                 inProgressTickets,
                 inReviewTickets,
+                inWorkTickets,
                 todoTickets,
                 blockedTickets,
                 percentComplete,
                 percentInProgress,
                 percentInReview,
+                percentInWork,
                 percentRemaining,
                 percentBlocked
             };
@@ -2601,12 +2631,51 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             };
         }
 
+        function calculateCurrentSprintPosition(tickets) {
+            if (!tickets || tickets.length === 0) {
+                return null;
+            }
+
+            // Extract sprint numbers from sprint names
+            const sprintNumbers = [];
+            tickets.forEach(ticket => {
+                if (ticket.sprint) {
+                    // Extract the last number from sprint name (e.g., "DOMO R2 Sprint 11" -> 11)
+                    const matches = ticket.sprint.match(/\d+/g);
+                    if (matches && matches.length > 0) {
+                        const sprintNumber = parseInt(matches[matches.length - 1], 10);
+                        if (!isNaN(sprintNumber)) {
+                            sprintNumbers.push(sprintNumber);
+                        }
+                    }
+                }
+            });
+
+            if (sprintNumbers.length === 0) {
+                return null;
+            }
+
+            // Find the highest sprint number (current sprint)
+            const currentSprint = Math.max(...sprintNumbers);
+            const minSprint = Math.min(...sprintNumbers);
+            const totalSprints = currentSprint - minSprint + 1;
+
+            // Calculate position as a percentage
+            // Assuming sprints are evenly distributed across the timeline
+            const sprintPosition = ((currentSprint - minSprint) / totalSprints) * 100;
+
+            return {
+                currentSprint,
+                sprintPosition: Math.min(100, Math.max(0, sprintPosition))
+            };
+        }
+
         // ===== UI RENDERING =====
-        function renderMetrics(metrics, dateProgress) {
+        function renderMetrics(metrics, dateProgress, sprintData) {
             const metricsGrid = document.getElementById('metricsGrid');
             metricsGrid.innerHTML = `
                 <div class="metric-card done ${activeFilter === 'all' ? 'active' : ''}" data-filter="all">
-                    <div class="metric-label">Total Tickets</div>
+                    <div class="metric-label">Total R2 Tickets</div>
                     <div class="metric-value">${metrics.totalTickets}</div>
                 </div>
                 <div class="metric-card done ${activeFilter === 'done' ? 'active' : ''}" data-filter="done">
@@ -2614,18 +2683,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                     <div class="metric-value">${metrics.percentComplete}%</div>
                     <div class="metric-subtext">${metrics.doneTickets} tickets</div>
                 </div>
-                <div class="metric-card in-progress ${activeFilter === 'in-progress' ? 'active' : ''}" data-filter="in-progress">
-                    <div class="metric-label">In Progress</div>
-                    <div class="metric-value">${metrics.percentInProgress}%</div>
-                    <div class="metric-subtext">${metrics.inProgressTickets} tickets</div>
-                </div>
-                <div class="metric-card in-review ${activeFilter === 'in-review' ? 'active' : ''}" data-filter="in-review">
-                    <div class="metric-label">In Testing</div>
-                    <div class="metric-value">${metrics.percentInReview}%</div>
-                    <div class="metric-subtext">${metrics.inReviewTickets} tickets</div>
+                <div class="metric-card in-progress ${activeFilter === 'in-work' ? 'active' : ''}" data-filter="in-work">
+                    <div class="metric-label">In Progress/Testing</div>
+                    <div class="metric-value">${metrics.percentInWork}%</div>
+                    <div class="metric-subtext">${metrics.inWorkTickets} tickets</div>
                 </div>
                 <div class="metric-card todo ${activeFilter === 'todo' ? 'active' : ''}" data-filter="todo">
-                    <div class="metric-label">To Do</div>
+                    <div class="metric-label">Not Done</div>
                     <div class="metric-value">${metrics.percentRemaining}%</div>
                     <div class="metric-subtext">${metrics.todoTickets} tickets</div>
                 </div>
@@ -2644,6 +2708,15 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             } else {
                 document.getElementById('progressPercent').textContent = `${metrics.percentComplete}%`;
                 document.getElementById('progressFill').style.width = `${metrics.percentComplete}%`;
+            }
+
+            // Update sprint indicator position if sprint data is available
+            const sprintIndicator = document.getElementById('sprintIndicator');
+            if (sprintIndicator && sprintData) {
+                sprintIndicator.style.left = `${sprintData.sprintPosition}%`;
+                sprintIndicator.style.display = 'block';
+            } else if (sprintIndicator) {
+                sprintIndicator.style.display = 'none';
             }
 
             // Add click event listeners to metric cards
@@ -2689,7 +2762,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             // Re-render with updated filter
             const metrics = calculateMetrics(allTickets);
             const dateProgress = calculateDateBasedProgress(allTickets);
-            renderMetrics(metrics, dateProgress);
+            const sprintData = calculateCurrentSprintPosition(allTickets);
+            renderMetrics(metrics, dateProgress, sprintData);
             renderIssueTable(filteredTickets);
         }
 
@@ -3782,12 +3856,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
                 const metrics = calculateMetrics(allTickets);
                 const dateProgress = calculateDateBasedProgress(allTickets);
+                const sprintData = calculateCurrentSprintPosition(allTickets);
                 const epicBreakdown = getEpicBreakdown(allTickets);
                 const sprintProgress = getSprintProgress(allTickets);
                 const sprintMetrics = getCurrentSprintMetrics(allTickets);
 
                 renderExecutiveSummary(milestonesData, allTickets, risksData);
-                renderMetrics(metrics, dateProgress);
+                renderMetrics(metrics, dateProgress, sprintData);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
                 renderCurrentSprintChart(sprintMetrics);
@@ -3829,7 +3904,9 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             if (searchTerm !== '') {
                 activeFilter = null;
                 const metrics = calculateMetrics(allTickets);
-                renderMetrics(metrics);
+                const dateProgress = calculateDateBasedProgress(allTickets);
+                const sprintData = calculateCurrentSprintPosition(allTickets);
+                renderMetrics(metrics, dateProgress, sprintData);
             }
 
             if (searchTerm === '') {
@@ -3880,7 +3957,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
             const metrics = calculateMetrics(allTickets);
             const dateProgress = calculateDateBasedProgress(allTickets);
-            renderMetrics(metrics, dateProgress);
+            const sprintData = calculateCurrentSprintPosition(allTickets);
+            renderMetrics(metrics, dateProgress, sprintData);
             renderIssueTable(filteredTickets);
         });
 
