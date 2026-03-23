@@ -2625,18 +2625,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
         // ===== DATE-BASED PROGRESS CALCULATION =====
         function calculateDateBasedProgress(tickets) {
-            const startDate = new Date('2026-01-01');
-
-            // Find the last due date from tickets
-            let endDate = new Date('2026-04-27'); // Default
-            tickets.forEach(ticket => {
-                if (ticket.dueDate) {
-                    const dueDate = new Date(ticket.dueDate);
-                    if (dueDate > endDate) {
-                        endDate = dueDate;
-                    }
-                }
-            });
+            const startDate = new Date('2025-12-31');
+            const endDate = new Date('2026-04-26');
 
             const today = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -2681,20 +2671,22 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             const last5Sprints = allSprintNumbers.slice(-5);
             const currentSprint = Math.max(...last5Sprints);
 
-            // Timeline dates
-            const timelineStart = new Date('2026-01-01');
-            const timelineEnd = new Date('2026-04-27');
+            // Timeline dates: 12/31/2025 - 4/26/2026
+            const timelineStart = new Date('2025-12-31');
+            const timelineEnd = new Date('2026-04-26');
             const totalDays = Math.ceil((timelineEnd - timelineStart) / (1000 * 60 * 60 * 24));
 
             // Fixed 2-week (14-day) sprint duration
             const sprintDuration = 14;
 
+            // Sprint 8 started on 12/31/2025 (timeline start date)
+            const firstSprintInTimeline = 8;
+
             // Calculate positions based on fixed 2-week sprint schedule
-            // Assuming Sprint 1 starts on timeline start date (Jan 1, 2026)
             const sprints = last5Sprints.map(sprintNum => {
                 // Calculate days from timeline start to this sprint's start
-                // Sprint 1 starts on day 0, Sprint 2 starts on day 14, etc.
-                const sprintStartDay = (sprintNum - 1) * sprintDuration;
+                // Sprint 8 starts on day 0, Sprint 9 starts on day 14, Sprint 10 on day 28, etc.
+                const sprintStartDay = (sprintNum - firstSprintInTimeline) * sprintDuration;
 
                 // Calculate position as percentage of total timeline
                 const position = (sprintStartDay / totalDays) * 100;
