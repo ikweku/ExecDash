@@ -2657,8 +2657,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 return null;
             }
 
-            // Extract sprint numbers from sprint names
-            const sprintNumbersSet = new Set();
+            // Group tickets by sprint and calculate actual start/end dates
+            const sprintMap = new Map();
             tickets.forEach(ticket => {
                 if (ticket.sprint) {
                     // Extract the last number from sprint name (e.g., "DOMO R2 Sprint 11" -> 11)
@@ -2666,41 +2666,90 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                     if (matches && matches.length > 0) {
                         const sprintNumber = parseInt(matches[matches.length - 1], 10);
                         if (!isNaN(sprintNumber)) {
-                            sprintNumbersSet.add(sprintNumber);
+                            if (!sprintMap.has(sprintNumber)) {
+                                sprintMap.set(sprintNumber, {
+                                    number: sprintNumber,
+                                    tickets: []
+                                });
+                            }
+                            sprintMap.get(sprintNumber).tickets.push(ticket);
                         }
                     }
                 }
             });
 
-            if (sprintNumbersSet.size === 0) {
+            if (sprintMap.size === 0) {
                 return null;
             }
 
-            const sprintNumbers = Array.from(sprintNumbersSet).sort((a, b) => a - b);
-            const currentSprint = Math.max(...sprintNumbers);
-            const minSprint = Math.min(...sprintNumbers);
+            // Calculate actual start and end dates for each sprint
+            const sprintData = [];
+            sprintMap.forEach((sprint, sprintNum) => {
+                let earliestStart = null;
+                let latestEnd = null;
 
-            // Parse start and end dates from dateProgress
-            const startDate = new Date('2026-01-01');
-            const endDate = new Date('2026-04-27');
-            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                sprint.tickets.forEach(ticket => {
+                    // Get earliest created date (sprint start)
+                    if (ticket.created) {
+                        try {
+                            const createdDate = new Date(ticket.created);
+                            if (!earliestStart || createdDate < earliestStart) {
+                                earliestStart = createdDate;
+                            }
+                        } catch (e) {
+                            // Ignore invalid dates
+                        }
+                    }
 
-            // Assume 2-week (14-day) sprints
-            const sprintDuration = 14;
+                    // Get latest target end date (sprint end)
+                    if (ticket.dueDate) {
+                        try {
+                            const dueDate = new Date(ticket.dueDate);
+                            if (!latestEnd || dueDate > latestEnd) {
+                                latestEnd = dueDate;
+                            }
+                        } catch (e) {
+                            // Ignore invalid dates
+                        }
+                    }
+                });
 
-            // Calculate positions for each sprint
-            const sprints = sprintNumbers.map(sprintNum => {
-                // Calculate days from start for this sprint
-                // Assuming Sprint 1 started on startDate
-                const sprintStartDay = (sprintNum - 1) * sprintDuration;
+                // Only include sprints with valid dates
+                if (earliestStart && latestEnd) {
+                    sprintData.push({
+                        number: sprintNum,
+                        startDate: earliestStart,
+                        endDate: latestEnd
+                    });
+                }
+            });
+
+            if (sprintData.length === 0) {
+                return null;
+            }
+
+            // Sort by sprint number and take only the last 5 sprints
+            sprintData.sort((a, b) => a.number - b.number);
+            const last5Sprints = sprintData.slice(-5);
+            const currentSprint = Math.max(...last5Sprints.map(s => s.number));
+
+            // Timeline dates from dateProgress
+            const timelineStart = new Date('2026-01-01');
+            const timelineEnd = new Date('2026-04-27');
+            const totalDays = Math.ceil((timelineEnd - timelineStart) / (1000 * 60 * 60 * 24));
+
+            // Calculate positions based on actual sprint start dates
+            const sprints = last5Sprints.map(sprint => {
+                // Days from timeline start to sprint start
+                const daysFromStart = Math.ceil((sprint.startDate - timelineStart) / (1000 * 60 * 60 * 24));
 
                 // Calculate position as percentage of total timeline
-                const position = (sprintStartDay / totalDays) * 100;
+                const position = (daysFromStart / totalDays) * 100;
 
                 return {
-                    number: sprintNum,
+                    number: sprint.number,
                     position: Math.min(100, Math.max(0, position)),
-                    isCurrent: sprintNum === currentSprint
+                    isCurrent: sprint.number === currentSprint
                 };
             });
 
