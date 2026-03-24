@@ -2724,13 +2724,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             // Fixed 2-week (14-day) sprint duration
             const sprintDuration = 14;
 
-            // Sprint 1 started on 12/31/2025 (timeline start date)
-            const firstSprintInTimeline = 1;
+            // First sprint in the last 5 sprints starts at timeline start date (12/31/2025)
+            const firstSprintInTimeline = Math.min(...last5Sprints);
 
             // Calculate positions based on fixed 2-week sprint schedule
             const sprints = last5Sprints.map(sprintNum => {
                 // Calculate days from timeline start to this sprint's start
-                // Sprint 1 starts on day 0, Sprint 2 starts on day 14, Sprint 3 on day 28, etc.
+                // First sprint in our set starts on day 0, next sprint on day 14, etc.
                 const sprintStartDay = (sprintNum - firstSprintInTimeline) * sprintDuration;
 
                 // Calculate position as percentage of total timeline
