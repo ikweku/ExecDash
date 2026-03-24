@@ -2318,8 +2318,14 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
             tickets.forEach(ticket => {
                 // Use parentKey for grouping (unique identifier) or parentSummary, or fall back to epic field
-                const epicKey = ticket.parentKey || ticket.parentSummary || ticket.epic || 'Others';
-                const epicName = ticket.parentSummary || ticket.epic || 'Others';
+                let epicKey = ticket.parentKey || ticket.parentSummary || ticket.epic || 'Others';
+                let epicName = ticket.parentSummary || ticket.epic || 'Others';
+
+                // Consolidate all epics ending with "Integration" into "Data Source Integration"
+                if (epicName.endsWith('Integration')) {
+                    epicKey = 'Data Source Integration';
+                    epicName = 'Data Source Integration';
+                }
 
                 if (!epicMap.has(epicKey)) {
                     epicMap.set(epicKey, {
