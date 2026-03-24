@@ -1851,7 +1851,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 </div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">Total Ticket Status</div>
+                <div class="chart-title">Sprint Velocity</div>
                 <div class="chart-container">
                     <canvas id="sprintVelocityChart"></canvas>
                 </div>
@@ -2426,6 +2426,50 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             };
         }
 
+        function calculateSprintVelocity(tickets) {
+            // Group tickets by sprint
+            const sprintMap = new Map();
+
+            tickets.forEach(ticket => {
+                if (ticket.sprint) {
+                    // Extract sprint number
+                    const matches = ticket.sprint.match(/\d+/g);
+                    if (matches && matches.length > 0) {
+                        const sprintNumber = parseInt(matches[matches.length - 1], 10);
+                        if (!isNaN(sprintNumber)) {
+                            if (!sprintMap.has(sprintNumber)) {
+                                sprintMap.set(sprintNumber, {
+                                    number: sprintNumber,
+                                    completedPoints: 0,
+                                    completedTickets: 0
+                                });
+                            }
+
+                            const sprintData = sprintMap.get(sprintNumber);
+                            if (ticket.status === 'Done') {
+                                sprintData.completedPoints += ticket.storyPoints || 0;
+                                sprintData.completedTickets += 1;
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Sort by sprint number and take last 5
+            const allSprints = Array.from(sprintMap.values()).sort((a, b) => a.number - b.number);
+            const last5Sprints = allSprints.slice(-5);
+
+            // Determine if we should use story points or ticket count
+            const totalPoints = last5Sprints.reduce((sum, s) => sum + s.completedPoints, 0);
+            const useStoryPoints = totalPoints > 0;
+
+            return last5Sprints.map(sprint => ({
+                sprintName: `Sprint ${sprint.number}`,
+                velocity: useStoryPoints ? sprint.completedPoints : sprint.completedTickets,
+                unit: useStoryPoints ? 'Story Points' : 'Tickets'
+            }));
+        }
+
         // ===== NEW EXECUTIVE SUMMARY FUNCTIONS =====
 
         // Helper: Get recent completions from tickets
@@ -2679,13 +2723,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             // Fixed 2-week (14-day) sprint duration
             const sprintDuration = 14;
 
-            // Sprint 8 started on 12/31/2025 (timeline start date)
-            const firstSprintInTimeline = 8;
+            // Sprint 1 started on 12/31/2025 (timeline start date)
+            const firstSprintInTimeline = 1;
 
             // Calculate positions based on fixed 2-week sprint schedule
             const sprints = last5Sprints.map(sprintNum => {
                 // Calculate days from timeline start to this sprint's start
-                // Sprint 8 starts on day 0, Sprint 9 starts on day 14, Sprint 10 on day 28, etc.
+                // Sprint 1 starts on day 0, Sprint 2 starts on day 14, Sprint 3 on day 28, etc.
                 const sprintStartDay = (sprintNum - firstSprintInTimeline) * sprintDuration;
 
                 // Calculate position as percentage of total timeline
@@ -2738,10 +2782,11 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             if (dateProgress) {
                 document.getElementById('progressPercent').textContent = `${dateProgress.progressPercent}%`;
                 document.getElementById('progressFill').style.width = `${dateProgress.progressPercent}%`;
-                document.getElementById('progressLabel').textContent = `Sprint Progress (${dateProgress.startDate} - ${dateProgress.endDate})`;
+                document.getElementById('progressLabel').textContent = `Sprint Progress`;
             } else {
                 document.getElementById('progressPercent').textContent = `${metrics.percentComplete}%`;
                 document.getElementById('progressFill').style.width = `${metrics.percentComplete}%`;
+                document.getElementById('progressLabel').textContent = `Sprint Progress`;
             }
 
             // Update sprint indicators - render all sprints on timeline
@@ -2758,7 +2803,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
                     const label = document.createElement('div');
                     label.className = 'sprint-label';
-                    label.textContent = `S${sprint.number}`;
+                    label.textContent = `Sprint ${sprint.number}`;
 
                     indicator.appendChild(label);
                     sprintIndicatorsContainer.appendChild(indicator);
@@ -2944,15 +2989,24 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                     ]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            stacked: true
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Tickets',
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                }
+                            }
                         },
                         y: {
-                            stacked: true,
-                            beginAtZero: true
+                            stacked: true
                         }
                     },
                     plugins: {
@@ -3020,81 +3074,61 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             });
         }
 
-        function renderCurrentSprintChart(sprintMetrics) {
+        function renderSprintVelocityChart(velocityData) {
             const ctx = document.getElementById('sprintVelocityChart');
 
             if (charts.sprintVelocity) {
                 charts.sprintVelocity.destroy();
             }
 
-            // Chart title is now static in HTML as "Total Ticket Status"
+            if (!velocityData || velocityData.length === 0) {
+                return;
+            }
+
+            const unit = velocityData[0].unit;
 
             charts.sprintVelocity = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: [sprintMetrics.sprintNumber],
+                    labels: velocityData.map(v => v.sprintName),
                     datasets: [
                         {
-                            label: 'Committed',
-                            data: [sprintMetrics.committed],
-                            backgroundColor: '#6b7280'
-                        },
-                        {
-                            label: 'In Progress',
-                            data: [sprintMetrics.inProgress],
-                            backgroundColor: '#3b82f6'
-                        },
-                        {
-                            label: 'Completed',
-                            data: [sprintMetrics.completed],
-                            backgroundColor: '#10b981'
+                            label: `Completed ${unit}`,
+                            data: velocityData.map(v => v.velocity),
+                            backgroundColor: '#10b981',
+                            borderColor: '#059669',
+                            borderWidth: 1
                         }
                     ]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
+                        x: {
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: sprintMetrics.unit
+                                text: `${unit} Completed`,
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                autoSkip: false
                             }
                         }
                     },
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            display: false
                         }
                     }
-                },
-                plugins: [{
-                    id: 'dataLabels',
-                    afterDatasetsDraw: function(chart) {
-                        const ctx = chart.ctx;
-                        chart.data.datasets.forEach((dataset, i) => {
-                            const meta = chart.getDatasetMeta(i);
-                            if (!meta.hidden) {
-                                meta.data.forEach((element, index) => {
-                                    ctx.fillStyle = '#1f2937';
-                                    const fontSize = 14;
-                                    const fontStyle = 'bold';
-                                    const fontFamily = 'Arial';
-                                    ctx.font = fontStyle + ' ' + fontSize + 'px ' + fontFamily;
-
-                                    const dataString = dataset.data[index].toString();
-                                    ctx.textAlign = 'center';
-                                    ctx.textBaseline = 'middle';
-
-                                    const padding = 5;
-                                    const position = element.tooltipPosition();
-                                    ctx.fillText(dataString, position.x, position.y - fontSize / 2 - padding);
-                                });
-                            }
-                        });
-                    }
-                }]
+                }
             });
         }
 
@@ -3245,8 +3279,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         function renderCriticalPathTable(tickets) {
             const tableContainer = document.getElementById('criticalPathTable');
 
-            // Filter tickets that have labels (critical path items)
-            const criticalPathItems = tickets.filter(t => t.labels && t.labels.trim() !== '');
+            // Filter tickets that are In Progress or Not Done (To Do)
+            const criticalPathItems = tickets.filter(t => t.status === 'In Progress' || t.status === 'To Do');
 
             // Sort by due date (earliest first)
             criticalPathItems.sort((a, b) => {
@@ -3906,14 +3940,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 const dateProgress = calculateDateBasedProgress(allTickets);
                 const sprintData = calculateSprintPositions(allTickets, dateProgress);
                 const epicBreakdown = getEpicBreakdown(allTickets);
-                const sprintProgress = getSprintProgress(allTickets);
-                const sprintMetrics = getCurrentSprintMetrics(allTickets);
+                const sprintVelocity = calculateSprintVelocity(allTickets);
 
                 renderExecutiveSummary(milestonesData, allTickets, risksData);
                 renderMetrics(metrics, dateProgress, sprintData);
                 renderStatusDonutChart(metrics);
                 renderEpicBreakdownChart(epicBreakdown);
-                renderCurrentSprintChart(sprintMetrics);
+                renderSprintVelocityChart(sprintVelocity);
                 renderCriticalPathTable(allTickets);
                 renderMilestoneAccordion();
                 renderRisksTable();
