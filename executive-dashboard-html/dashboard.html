@@ -2676,8 +2676,10 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
         // ===== DATE-BASED PROGRESS CALCULATION =====
         function calculateDateBasedProgress(tickets) {
-            const startDate = new Date('2025-12-31');
-            const endDate = new Date('2026-04-26');
+            // Sprint 1 started on October 16, 2025
+            // 12 sprints × 14 days = 168 days total
+            const startDate = new Date('2025-10-16');
+            const endDate = new Date('2026-04-15');
 
             const today = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -2721,9 +2723,10 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             const allSprintNumbers = Array.from(sprintNumbersSet).sort((a, b) => a - b);
             const currentSprint = Math.max(...allSprintNumbers);
 
-            // Timeline dates: 12/31/2025 - 4/26/2026
-            const timelineStart = new Date('2025-12-31');
-            const timelineEnd = new Date('2026-04-26');
+            // Timeline dates: Sprint 1 started Oct 16, 2025
+            // 12 sprints × 14 days = 168 days, ending ~April 2, 2026
+            const timelineStart = new Date('2025-10-16');
+            const timelineEnd = new Date('2026-04-15');
             const totalDays = Math.ceil((timelineEnd - timelineStart) / (1000 * 60 * 60 * 24));
 
             // Fixed 2-week (14-day) sprint duration
