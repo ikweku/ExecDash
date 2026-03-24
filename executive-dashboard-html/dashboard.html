@@ -2326,8 +2326,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                         epic: epicName,
                         done: 0,
                         inProgress: 0,
-                        inReview: 0,
-                        todo: 0,
+                        notDone: 0,
                         blocked: 0,
                         total: 0
                     });
@@ -2338,9 +2337,11 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
                 switch (ticket.status) {
                     case 'Done': epicData.done++; break;
-                    case 'In Progress': epicData.inProgress++; break;
-                    case 'In Review': epicData.inReview++; break;
-                    case 'To Do': epicData.todo++; break;
+                    case 'In Progress':
+                    case 'In Review':
+                        epicData.inProgress++;
+                        break;
+                    case 'To Do': epicData.notDone++; break;
                     case 'Blocked': epicData.blocked++; break;
                 }
             });
@@ -2919,9 +2920,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
             const data = [
                 { name: 'Done', value: metrics.doneTickets, color: '#10b981' },
-                { name: 'In Progress', value: metrics.inProgressTickets, color: '#3b82f6' },
-                { name: 'In Review', value: metrics.inReviewTickets, color: '#f59e0b' },
-                { name: 'To Do', value: metrics.todoTickets, color: '#6b7280' },
+                { name: 'In Progress', value: metrics.inWorkTickets, color: '#3b82f6' },
+                { name: 'Not Done', value: metrics.todoTickets, color: '#6b7280' },
                 { name: 'Blocked', value: metrics.blockedTickets, color: '#ef4444' }
             ].filter(item => item.value > 0);
 
@@ -2972,13 +2972,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                             backgroundColor: '#3b82f6'
                         },
                         {
-                            label: 'In Review',
-                            data: epics.map(e => e.inReview),
-                            backgroundColor: '#f59e0b'
-                        },
-                        {
-                            label: 'To Do',
-                            data: epics.map(e => e.todo),
+                            label: 'Not Done',
+                            data: epics.map(e => e.notDone),
                             backgroundColor: '#6b7280'
                         },
                         {
