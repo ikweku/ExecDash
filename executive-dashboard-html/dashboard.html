@@ -2717,10 +2717,9 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 return null;
             }
 
-            // Sort sprint numbers and take only the last 5 sprints
+            // Sort sprint numbers - show ALL sprints
             const allSprintNumbers = Array.from(sprintNumbersSet).sort((a, b) => a - b);
-            const last5Sprints = allSprintNumbers.slice(-5);
-            const currentSprint = Math.max(...last5Sprints);
+            const currentSprint = Math.max(...allSprintNumbers);
 
             // Timeline dates: 12/31/2025 - 4/26/2026
             const timelineStart = new Date('2025-12-31');
@@ -2730,13 +2729,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             // Fixed 2-week (14-day) sprint duration
             const sprintDuration = 14;
 
-            // First sprint in the last 5 sprints starts at timeline start date (12/31/2025)
-            const firstSprintInTimeline = Math.min(...last5Sprints);
+            // Sprint 1 starts at timeline start date (12/31/2025) - baseline 0%
+            const firstSprintInTimeline = 1;
 
             // Calculate positions based on fixed 2-week sprint schedule
-            const sprints = last5Sprints.map(sprintNum => {
+            const sprints = allSprintNumbers.map(sprintNum => {
                 // Calculate days from timeline start to this sprint's start
-                // First sprint in our set starts on day 0, next sprint on day 14, etc.
+                // Sprint 1 starts on day 0, Sprint 2 on day 14, Sprint 3 on day 28, etc.
                 const sprintStartDay = (sprintNum - firstSprintInTimeline) * sprintDuration;
 
                 // Calculate position as percentage of total timeline
