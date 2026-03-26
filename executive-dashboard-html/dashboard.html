@@ -2449,7 +2449,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                             const created = row['Created'] || row['Create Date'] || '';
                             const updated = row['Updated'] || row['Last Updated'] || '';
                             const dueDate = row['Custom field (Target end)'] || row['Custom Field (Target end)'] || row['Due Date'] || row['Due'] || '';
-                            const storyPoints = parseInt(row['Story Points'] || row['Points'] || '0', 10);
+                            const storyPoints = parseInt(row['Custom field (Story Points)'] || row['Story Points'] || row['Points'] || '0', 10);
 
                             return {
                                 issueKey,
