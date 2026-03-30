@@ -343,10 +343,10 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Analytics - 2x2 Grid */}
+            {/* Analytics - 2x2 Grid (Sprint Forecast) */}
             <div>
               <div className="mb-4">
-                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider">ANALYTICS</h2>
+                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider">SPRINT FORECAST</h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <SprintBurndownChart data={weeklyProgress} />
