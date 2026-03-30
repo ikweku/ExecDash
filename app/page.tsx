@@ -41,6 +41,7 @@ import {
   getWeeklyProgress,
   getSprintVelocity,
 } from '@/lib/metrics'
+import { getAllSprints, getCurrentSprint, getSprintTickets, getSprintNumber } from '@/lib/sprint-filter'
 import { sampleTickets } from '@/lib/sample-data'
 import { NormalizedTicket, SprintInfo } from '@/types'
 
@@ -52,6 +53,8 @@ export default function DashboardPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [sprintInfo, setSprintInfo] = useState<SprintInfo | null>(null)
   const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'in-progress' | 'in-review' | 'blocked' | 'todo'>('all')
+  const [selectedSprint, setSelectedSprint] = useState<string | null>(null)
+  const [availableSprints, setAvailableSprints] = useState<string[]>([])
 
   // Load CSV data from /data/latest.csv on initial mount
   useEffect(() => {
@@ -69,11 +72,23 @@ export default function DashboardPage() {
           setTickets(normalized)
           setHasUploadedData(true)
           setLastUpdated(new Date(response.headers.get('last-modified') || Date.now()))
+
+          // Set available sprints and auto-detect current sprint
+          const sprints = getAllSprints(normalized)
+          setAvailableSprints(sprints)
+          const currentSprint = getCurrentSprint(normalized)
+          setSelectedSprint(currentSprint)
         } else {
           // Fallback to sample data if CSV not found
           const normalized = normalizeTickets(sampleTickets)
           setTickets(normalized)
           setHasUploadedData(false)
+
+          // Set sprints for sample data
+          const sprints = getAllSprints(normalized)
+          setAvailableSprints(sprints)
+          const currentSprint = getCurrentSprint(normalized)
+          setSelectedSprint(currentSprint)
         }
       } catch (error) {
         console.error('Error loading CSV:', error)
@@ -81,6 +96,12 @@ export default function DashboardPage() {
         const normalized = normalizeTickets(sampleTickets)
         setTickets(normalized)
         setHasUploadedData(false)
+
+        // Set sprints for sample data
+        const sprints = getAllSprints(normalized)
+        setAvailableSprints(sprints)
+        const currentSprint = getCurrentSprint(normalized)
+        setSelectedSprint(currentSprint)
       } finally {
         setIsLoading(false)
       }
@@ -100,6 +121,12 @@ export default function DashboardPage() {
       // Parse sprint info from filename (e.g., "Sprint 11 - 03-17-26.csv")
       const sprint = parseSprintInfo(file.name)
       setSprintInfo(sprint)
+
+      // Set available sprints and auto-detect current sprint
+      const sprints = getAllSprints(normalized)
+      setAvailableSprints(sprints)
+      const currentSprint = getCurrentSprint(normalized)
+      setSelectedSprint(currentSprint)
     } catch (error) {
       console.error('Error parsing CSV:', error)
       alert('Error parsing CSV file. Please check the file format.')
@@ -112,16 +139,27 @@ export default function DashboardPage() {
     const normalized = normalizeTickets(sampleTickets)
     setTickets(normalized)
     setHasUploadedData(false)
+
+    // Set sprints for sample data
+    const sprints = getAllSprints(normalized)
+    setAvailableSprints(sprints)
+    const currentSprint = getCurrentSprint(normalized)
+    setSelectedSprint(currentSprint)
   }
 
   const handleStatusFilter = (filter: 'all' | 'completed' | 'in-progress' | 'in-review' | 'blocked' | 'todo') => {
     setStatusFilter(filter === statusFilter ? 'all' : filter)
   }
 
+  // Filter tickets by selected sprint (includes rollover logic)
+  const sprintFilteredTickets = selectedSprint
+    ? getSprintTickets(tickets, selectedSprint)
+    : tickets
+
   // Filter tickets based on selected status
   const filteredTickets = statusFilter === 'all'
-    ? tickets
-    : tickets.filter(ticket => {
+    ? sprintFilteredTickets
+    : sprintFilteredTickets.filter(ticket => {
         switch (statusFilter) {
           case 'completed':
             return ticket.status === 'Done'
@@ -138,18 +176,18 @@ export default function DashboardPage() {
         }
       })
 
-  // Calculate all metrics
-  const metrics = calculateMetrics(tickets)
-  const epicBreakdown = getEpicBreakdown(tickets)
-  const assigneeBreakdown = getAssigneeBreakdown(tickets)
+  // Calculate all metrics using sprint-filtered tickets
+  const metrics = calculateMetrics(sprintFilteredTickets)
+  const epicBreakdown = getEpicBreakdown(sprintFilteredTickets)
+  const assigneeBreakdown = getAssigneeBreakdown(sprintFilteredTickets)
   const statusDistribution = getStatusDistribution(metrics)
-  const blockedTickets = getBlockedTickets(tickets)
-  const agingTickets = getAgingTickets(tickets, 7)
-  const recentlyCompleted = getRecentlyCompleted(tickets, 5)
-  const recentlyUpdated = getRecentlyUpdated(tickets, 5)
+  const blockedTickets = getBlockedTickets(sprintFilteredTickets)
+  const agingTickets = getAgingTickets(sprintFilteredTickets, 7)
+  const recentlyCompleted = getRecentlyCompleted(sprintFilteredTickets, 5)
+  const recentlyUpdated = getRecentlyUpdated(sprintFilteredTickets, 5)
   const narrative = generateNarrative(metrics)
-  const weeklyProgress = getWeeklyProgress(tickets)
-  const sprintVelocity = getSprintVelocity(tickets)
+  const weeklyProgress = getWeeklyProgress(sprintFilteredTickets)
+  const sprintVelocity = getSprintVelocity(sprintFilteredTickets)
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -171,10 +209,20 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <select className="bg-indigo-800/50 border border-indigo-700 text-white text-sm rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option>Sprint {sprintInfo?.sprintNumber || 14} (Current)</option>
-                <option>Sprint {(sprintInfo?.sprintNumber || 14) - 1}</option>
-                <option>Sprint {(sprintInfo?.sprintNumber || 14) - 2}</option>
+              <select
+                className="bg-indigo-800/50 border border-indigo-700 text-white text-sm rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={selectedSprint || ''}
+                onChange={(e) => setSelectedSprint(e.target.value)}
+              >
+                {availableSprints.length > 0 ? (
+                  availableSprints.map((sprint) => (
+                    <option key={sprint} value={sprint}>
+                      {sprint} {sprint === getCurrentSprint(tickets) ? '(Current)' : ''}
+                    </option>
+                  ))
+                ) : (
+                  <option>Sprint {sprintInfo?.sprintNumber || 14} (Current)</option>
+                )}
               </select>
               <select className="bg-indigo-800/50 border border-indigo-700 text-white text-sm rounded px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option>All Statuses</option>
@@ -208,7 +256,7 @@ export default function DashboardPage() {
           <div className="max-w-[1600px] mx-auto px-6 sm:px-8 lg:px-12 pb-3 border-t border-indigo-800/50 pt-3">
             <div className="flex items-center justify-between text-sm mb-2">
               <div className="text-indigo-300 font-semibold text-xs uppercase tracking-wider">
-                Sprint {sprintInfo?.sprintNumber || 14} Progress
+                {selectedSprint || `Sprint ${sprintInfo?.sprintNumber || 14}`} Progress
               </div>
               <div className="text-indigo-300 text-xs">
                 {metrics.doneTickets} of {metrics.totalTickets} completed &nbsp;&nbsp; {metrics.percentComplete}%
