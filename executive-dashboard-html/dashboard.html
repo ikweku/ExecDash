@@ -2038,14 +2038,6 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             <!-- Metrics will be populated by JavaScript -->
         </div>
 
-        <!-- Sprint Forecast Section -->
-        <div class="sprint-forecast-section" id="sprintForecastSection">
-            <h2 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Sprint Forecast</h2>
-            <div id="sprintForecastCards">
-                <!-- Sprint 12 and 13 cards will be populated by JavaScript -->
-            </div>
-        </div>
-
         <!-- Charts Grid -->
         <div class="charts-grid" id="chartsSection">
             <div class="chart-card">
@@ -2086,6 +2078,14 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 <div id="milestoneAccordion">
                     <!-- Milestone accordion will be rendered here by JavaScript -->
                 </div>
+            </div>
+        </div>
+
+        <!-- Sprint Forecast Section -->
+        <div class="sprint-forecast-section" id="sprintForecastSection">
+            <h2 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Sprint Forecast</h2>
+            <div id="sprintForecastCards">
+                <!-- Sprint 12 and 13 cards will be populated by JavaScript -->
             </div>
         </div>
 
@@ -2679,18 +2679,20 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             }));
         }
 
+        function getTicketSprintNumber(ticket) {
+            if (!ticket || !ticket.sprint) return null;
+            const matches = ticket.sprint.match(/\d+/g);
+            if (!matches || matches.length === 0) return null;
+            const sprintNumber = parseInt(matches[matches.length - 1], 10);
+            return isNaN(sprintNumber) ? null : sprintNumber;
+        }
+
         // Get detailed information for a specific sprint
         function getSprintDetails(tickets, sprintNumber) {
             // Filter tickets for this sprint
             const sprintTickets = tickets.filter(ticket => {
-                if (ticket.sprint) {
-                    const matches = ticket.sprint.match(/\d+/g);
-                    if (matches && matches.length > 0) {
-                        const ticketSprintNumber = parseInt(matches[matches.length - 1], 10);
-                        return ticketSprintNumber === sprintNumber;
-                    }
-                }
-                return false;
+                const ticketSprintNumber = getTicketSprintNumber(ticket);
+                return ticketSprintNumber === sprintNumber;
             });
 
             // Calculate status breakdown
@@ -2841,7 +2843,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                         <div class="win-item">
                             <div class="win-icon">🎯</div>
                             <div class="win-content">
-                                <div class="win-title">${ticket.key}: ${ticket.summary}</div>
+                                <div class="win-title">${ticket.issueKey}: ${ticket.summary}</div>
                                 <div class="win-subtitle">${ticket.assignee || 'Unassigned'}</div>
                             </div>
                         </div>
@@ -2942,9 +2944,9 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         // ===== DATE-BASED PROGRESS CALCULATION =====
         function calculateDateBasedProgress(tickets) {
             // Sprint 1 started on October 16, 2025
-            // 12 sprints × 14 days = 168 days total
+            // Sprint 12 ended on March 31, 2026
             const startDate = new Date('2025-10-16');
-            const endDate = new Date('2026-04-15');
+            const endDate = new Date('2026-03-31');
 
             const today = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -3105,6 +3107,10 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
 
                 if (filter === 'all') {
                     filteredTickets = allTickets;
+                } else if (filter === 'in-work') {
+                    filteredTickets = allTickets.filter(ticket =>
+                        ticket.status === 'In Progress' || ticket.status === 'In Review'
+                    );
                 } else {
                     // Map filter to status
                     const statusMap = {
@@ -3141,6 +3147,7 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             if (activeFilter && activeFilter !== 'all') {
                 const filterNames = {
                     'done': 'Showing: Completed',
+                    'in-work': 'Showing: In Progress/Testing',
                     'in-progress': 'Showing: In Progress',
                     'in-review': 'Showing: In Review',
                     'todo': 'Showing: To Do',
@@ -3184,6 +3191,50 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
             `;
         }
 
+        // Build Sprint 13 forecast from unresolved tickets in prior sprints
+        function getSprint13ForecastFromCarryover(tickets) {
+            const carryoverTickets = tickets.filter(ticket => {
+                const sprintNumber = getTicketSprintNumber(ticket);
+                if (sprintNumber === null || sprintNumber > 12) return false;
+                return ticket.status !== 'Done';
+            });
+
+            const statusBreakdown = {
+                done: 0,
+                inProgress: 0,
+                notDone: 0,
+                blocked: 0
+            };
+
+            let totalStoryPoints = 0;
+            carryoverTickets.forEach(ticket => {
+                const points = ticket.storyPoints || 0;
+                totalStoryPoints += points;
+
+                switch (ticket.status) {
+                    case 'In Progress':
+                    case 'In Review':
+                        statusBreakdown.inProgress++;
+                        break;
+                    case 'To Do':
+                        statusBreakdown.notDone++;
+                        break;
+                    case 'Blocked':
+                        statusBreakdown.blocked++;
+                        break;
+                }
+            });
+
+            return {
+                sprintNumber: 13,
+                totalTickets: carryoverTickets.length,
+                totalStoryPoints,
+                completedStoryPoints: 0,
+                statusBreakdown,
+                progressPercent: 0
+            };
+        }
+
         // Render Sprint Forecast cards for Sprint 12 and Sprint 13
         function renderSprintForecast(tickets) {
             const cardsContainer = document.getElementById('sprintForecastCards');
@@ -3193,15 +3244,30 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 return;
             }
 
-            // Get data for Sprint 12 (current) and Sprint 13 (planned)
-            const sprint12Data = getSprintDetails(tickets, 12);
-            const sprint13Data = getSprintDetails(tickets, 13);
+            // Sprint 12 is complete (previous sprint)
+            const sprint12ResolvedCount = tickets.filter(ticket => {
+                const sprintNumber = getTicketSprintNumber(ticket);
+                return sprintNumber === 12 && ticket.status === 'Done';
+            }).length;
+            const sprint12Data = {
+                ...getSprintDetails(tickets, 12),
+                progressPercent: 100,
+                statusBreakdown: {
+                    done: sprint12ResolvedCount,
+                    inProgress: 0,
+                    notDone: 0,
+                    blocked: 0
+                }
+            };
+
+            // Sprint 13 shows unresolved carryover from previous sprints
+            const sprint13Data = getSprint13ForecastFromCarryover(tickets);
 
             // Generate HTML for both sprint cards
             let html = '';
 
-            // Sprint 12 Card (Current Sprint)
-            html += generateSprintCard(sprint12Data, 'current', 'Current Sprint');
+            // Sprint 12 Card (Previous Sprint)
+            html += generateSprintCard(sprint12Data, 'current', 'Previous Sprint');
 
             // Sprint 13 Card (Planned Sprint)
             html += generateSprintCard(sprint13Data, 'planned', 'Planned Sprint');
@@ -3654,8 +3720,13 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         function renderCriticalPathTable(tickets) {
             const tableContainer = document.getElementById('criticalPathTable');
 
-            // Filter tickets that are In Progress or Not Done (To Do)
-            const criticalPathItems = tickets.filter(t => t.status === 'In Progress' || t.status === 'To Do');
+            // Only include tickets tagged with critical-path-elysium and still open
+            const criticalPathItems = tickets.filter(t => {
+                const labels = (t.labels || '').toLowerCase();
+                const hasCriticalPathLabel = labels.includes('critical-path-elysium');
+                const isOpenWork = t.status === 'In Progress' || t.status === 'In Review' || t.status === 'To Do' || t.status === 'Blocked';
+                return hasCriticalPathLabel && isOpenWork;
+            });
 
             // Sort by due date (earliest first)
             criticalPathItems.sort((a, b) => {
