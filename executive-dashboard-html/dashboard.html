@@ -2944,9 +2944,17 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
         // ===== DATE-BASED PROGRESS CALCULATION =====
         function calculateDateBasedProgress(tickets) {
             // Sprint 1 started on October 16, 2025
-            // Sprint 12 ended on March 31, 2026
             const startDate = new Date('2025-10-16');
-            const endDate = new Date('2026-03-31');
+            const sprintDurationDays = 14;
+
+            // Use the highest sprint number in the dataset as the active timeline endpoint
+            const sprintNumbers = (tickets || [])
+                .map(ticket => getTicketSprintNumber(ticket))
+                .filter(n => n !== null);
+            const currentSprint = sprintNumbers.length > 0 ? Math.max(...sprintNumbers) : 12;
+
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + (currentSprint * sprintDurationDays));
 
             const today = new Date();
             const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -2958,7 +2966,8 @@ Open	Risk	Description	1	Owner Name	Status details"></textarea>
                 startDate: startDate.toLocaleDateString(),
                 endDate: endDate.toLocaleDateString(),
                 elapsedDays,
-                totalDays
+                totalDays,
+                currentSprint
             };
         }
 
