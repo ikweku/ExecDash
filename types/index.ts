@@ -12,6 +12,7 @@ export interface JiraTicket {
   dueDate: string
   storyPoints: number | null
   sprint: string | null
+  labels: string | null
 }
 
 export interface NormalizedTicket extends Omit<JiraTicket, 'status'> {

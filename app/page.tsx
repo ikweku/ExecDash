@@ -24,6 +24,7 @@ import { SprintMetricCard } from '@/components/sprint-metric-card'
 import { IssueTrackerTable } from '@/components/issue-tracker-table'
 import { SprintBurndownChart } from '@/components/sprint-burndown-chart'
 import { SprintVelocityChart } from '@/components/sprint-velocity-chart'
+import { CriticalPathTable } from '@/components/critical-path-table'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { parseCSV } from '@/lib/csv-parser'
@@ -355,6 +356,9 @@ export default function DashboardPage() {
                 <AssigneeBreakdownChart data={assigneeBreakdown} />
               </div>
             </div>
+
+            {/* Critical Path Stories */}
+            <CriticalPathTable tickets={sprintFilteredTickets} />
 
             {/* Issue Tracker Table */}
             <div>

@@ -13,7 +13,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-10',
     dueDate: '2026-03-15',
     storyPoints: 8,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: 'critical-path-elysium',
   },
   {
     issueKey: 'GER-102',
@@ -26,7 +27,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-12',
     dueDate: '2026-03-20',
     storyPoints: 5,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-103',
@@ -39,7 +41,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-16',
     dueDate: '2026-03-25',
     storyPoints: 3,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: 'critical-path-elysium',
   },
   {
     issueKey: 'GER-104',
@@ -52,7 +55,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-10',
     dueDate: '2026-04-01',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
 
   // Dashboard Epic
@@ -67,7 +71,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-28',
     dueDate: '2026-03-01',
     storyPoints: 3,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-202',
@@ -80,7 +85,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-05',
     dueDate: '2026-03-10',
     storyPoints: 5,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-203',
@@ -93,7 +99,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-14',
     dueDate: '2026-03-15',
     storyPoints: 8,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-204',
@@ -106,7 +113,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-17',
     dueDate: '2026-03-30',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-205',
@@ -119,7 +127,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-20',
     dueDate: '2026-04-15',
     storyPoints: 3,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
 
   // API Integration Epic
@@ -134,7 +143,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-15',
     dueDate: '2026-02-20',
     storyPoints: 5,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: 'critical-path-elysium',
   },
   {
     issueKey: 'GER-302',
@@ -147,7 +157,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-08',
     dueDate: '2026-03-10',
     storyPoints: 8,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: 'critical-path-elysium',
   },
   {
     issueKey: 'GER-303',
@@ -160,7 +171,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-11',
     dueDate: '2026-03-15',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-304',
@@ -173,7 +185,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-15',
     dueDate: '2026-03-25',
     storyPoints: 3,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-305',
@@ -186,7 +199,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-10',
     dueDate: '2026-03-30',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
 
   // Mobile App Epic
@@ -201,7 +215,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-05',
     dueDate: '2026-02-10',
     storyPoints: 3,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-402',
@@ -214,7 +229,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-20',
     dueDate: '2026-02-25',
     storyPoints: 5,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-403',
@@ -227,7 +243,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-16',
     dueDate: '2026-03-20',
     storyPoints: 8,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-404',
@@ -240,7 +257,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-10',
     dueDate: '2026-04-01',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-405',
@@ -253,7 +271,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-01',
     dueDate: '2026-04-15',
     storyPoints: 2,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
 
   // Testing Epic
@@ -268,7 +287,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-25',
     dueDate: '2026-03-01',
     storyPoints: 5,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: 'critical-path-elysium',
   },
   {
     issueKey: 'GER-502',
@@ -281,7 +301,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-13',
     dueDate: '2026-03-15',
     storyPoints: 8,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-503',
@@ -294,7 +315,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-17',
     dueDate: '2026-03-25',
     storyPoints: 8,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-504',
@@ -307,7 +329,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-20',
     dueDate: '2026-04-01',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
 
   // Documentation Epic
@@ -322,7 +345,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-09',
     dueDate: '2026-03-10',
     storyPoints: 3,
-    sprint: 'Sprint 13',
+    sprint: 'DOMO R2 Sprint 12',
+    labels: null,
   },
   {
     issueKey: 'GER-602',
@@ -335,7 +359,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-14',
     dueDate: '2026-03-15',
     storyPoints: 5,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-603',
@@ -348,7 +373,8 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-03-16',
     dueDate: '2026-03-30',
     storyPoints: 3,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
   {
     issueKey: 'GER-604',
@@ -361,6 +387,7 @@ export const sampleTickets: JiraTicket[] = [
     updated: '2026-02-20',
     dueDate: '2026-04-10',
     storyPoints: 2,
-    sprint: 'Sprint 14',
+    sprint: 'DOMO R2 Sprint 13',
+    labels: null,
   },
 ]

@@ -21,6 +21,7 @@ export function parseCSV(file: File): Promise<JiraTicket[]> {
             const dueDate = row['Due Date'] || row['Due'] || ''
             const storyPoints = row['Story Points'] || row['Points'] || null
             const sprint = row['Custom field (Sprint)'] || row['Sprint'] || row['Sprint Name'] || null
+            const labels = row['Labels'] || row['Label'] || row['Custom field (Labels)'] || null
 
             return {
               issueKey,
@@ -34,6 +35,7 @@ export function parseCSV(file: File): Promise<JiraTicket[]> {
               dueDate,
               storyPoints: storyPoints ? parseFloat(storyPoints) : null,
               sprint,
+              labels,
             } as JiraTicket
           })
 
